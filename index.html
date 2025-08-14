@@ -168,13 +168,13 @@
             height: 100%;
         }
 
-        /* 康康角色升级版 */
+        /* 康康角色重新设计 */
         .kangkang-character {
             position: absolute;
-            bottom: 50px;
-            left: 50px;
-            width: 200px;
-            height: 250px;
+            bottom: 40px;
+            left: 40px;
+            width: 220px;
+            height: 280px;
             z-index: 50;
             pointer-events: none;
         }
@@ -185,148 +185,334 @@
             height: 100%;
         }
 
+        /* 人物主体 */
+        .kangkang-figure {
+            width: 180px;
+            height: 220px;
+            position: relative;
+            margin: 0 auto;
+            animation: figureBreathing 3s ease-in-out infinite;
+        }
+
+        @keyframes figureBreathing {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-12px) scale(1.03); }
+        }
+
+        /* 头部设计 */
+        .kangkang-head {
+            width: 110px;
+            height: 110px;
+            position: absolute;
+            top: 0;
+            left: 35px;
+            background: radial-gradient(circle at 35% 30%, #ffdbcf, #f7a999, #e89585);
+            border-radius: 50%;
+            border: 4px solid #2c3e50;
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.3),
+                inset 0 5px 15px rgba(255,255,255,0.2);
+            z-index: 20;
+        }
+
+        /* 发型 */
+        .kangkang-hair {
+            position: absolute;
+            top: -8px;
+            left: 15px;
+            width: 80px;
+            height: 50px;
+            background: linear-gradient(145deg, #2c3e50, #34495e, #455a75);
+            border-radius: 80px 80px 20px 20px;
+            border: 3px solid #1a252f;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .hair-strand {
+            position: absolute;
+            width: 15px;
+            height: 25px;
+            background: linear-gradient(145deg, #34495e, #455a75);
+            border-radius: 50% 50% 20px 20px;
+            border: 2px solid #1a252f;
+        }
+
+        .hair-strand:nth-child(1) { top: -5px; left: -8px; transform: rotate(-15deg); }
+        .hair-strand:nth-child(2) { top: -3px; right: -5px; transform: rotate(10deg); }
+
+        /* 脸部特征 */
+        .kangkang-face {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .face-expression {
+            font-size: 45px;
+            text-align: center;
+            line-height: 60px;
+            animation: faceChanging 4s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes faceChanging {
+            0%, 25% { transform: scale(1); content: '😤'; }
+            30%, 50% { transform: scale(1.1); content: '😠'; }
+            55%, 75% { transform: scale(1.05); content: '🤬'; }
+            80%, 100% { transform: scale(1.15); content: '😈'; }
+        }
+
+        /* 眼睛 */
+        .eye {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #2c3e50;
+            border-radius: 50%;
+            animation: eyeBlink 3s ease-in-out infinite;
+        }
+
+        .eye.left { top: 20px; left: 20px; }
+        .eye.right { top: 20px; right: 20px; }
+
+        @keyframes eyeBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        /* 嘴巴 */
+        .mouth {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 12px;
+            border: 3px solid #2c3e50;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            animation: mouthTalk 2s ease-in-out infinite;
+        }
+
+        @keyframes mouthTalk {
+            0%, 50%, 100% { transform: translateX(-50%) scaleY(1); }
+            25%, 75% { transform: translateX(-50%) scaleY(1.5); }
+        }
+
+        /* 身体设计 */
+        .kangkang-body {
+            width: 140px;
+            height: 160px;
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: linear-gradient(145deg, #ff6b6b, #ee5a24, #d63031);
+            border-radius: 70px 70px 40px 40px;
+            border: 4px solid #2c3e50;
+            box-shadow: 
+                0 15px 35px rgba(255,107,107,0.4),
+                inset 0 8px 20px rgba(255,255,255,0.2);
+        }
+
+        /* 衣服细节 */
+        .shirt-detail {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 50px 50px 20px 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* 纽扣 */
+        .button {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #f1c40f;
+            border-radius: 50%;
+            border: 2px solid #2c3e50;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .button:nth-child(1) { top: 30px; }
+        .button:nth-child(2) { top: 50px; }
+        .button:nth-child(3) { top: 70px; }
+
+        /* 手臂设计 */
+        .kangkang-arm {
+            width: 70px;
+            height: 30px;
+            position: absolute;
+            background: linear-gradient(45deg, #ffdbcf, #f7a999);
+            border-radius: 25px;
+            border: 3px solid #2c3e50;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transform-origin: left center;
+        }
+
+        .arm-left {
+            top: 100px;
+            left: -50px;
+            animation: armSwing 2s ease-in-out infinite;
+        }
+
+        .arm-right {
+            top: 100px;
+            right: -50px;
+            animation: armThrowMotion 1.2s ease-in-out infinite;
+        }
+
+        @keyframes armSwing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        @keyframes armThrowMotion {
+            0% { transform: rotate(0deg) scale(1); }
+            20% { transform: rotate(-20deg) scale(1.05); }
+            40% { transform: rotate(-50deg) scale(1.1); }
+            60% { transform: rotate(-80deg) scale(1.15); }
+            80% { transform: rotate(-60deg) scale(1.1); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        /* 手部 */
+        .hand {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #ffdbcf, #f7a999);
+            border-radius: 50%;
+            border: 2px solid #2c3e50;
+            right: -12px;
+            top: 2px;
+        }
+
+        /* 腿部 */
+        .kangkang-legs {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+        }
+
+        .leg {
+            width: 30px;
+            height: 50px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 20px;
+            border: 3px solid #1a252f;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .leg.left {
+            left: 10px;
+            animation: legWalk 2s ease-in-out infinite;
+        }
+
+        .leg.right {
+            right: 10px;
+            animation: legWalk 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes legWalk {
+            0%, 50%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+
+        /* 鞋子 */
+        .shoe {
+            position: absolute;
+            bottom: -8px;
+            width: 35px;
+            height: 15px;
+            background: #1a252f;
+            border-radius: 20px 5px 5px 20px;
+            border: 2px solid #0f1419;
+        }
+
+        /* 人物名字（放在下方） */
         .character-name {
             position: absolute;
-            top: -40px;
+            bottom: -40px;
             left: 0;
             right: 0;
             text-align: center;
             color: #fff;
             font-weight: 900;
-            font-size: 20px;
+            font-size: 22px;
             font-family: 'Orbitron', sans-serif;
             background: linear-gradient(45deg, #667eea, #764ba2);
-            padding: 8px 15px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(102,126,234,0.5);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            border: 3px solid rgba(255,255,255,0.3);
+            animation: nameGlow 3s ease-in-out infinite;
         }
 
-        .kangkang-avatar {
-            width: 120px;
-            height: 150px;
-            margin: 20px auto;
-            position: relative;
-            animation: kangkangBreathe 2s ease-in-out infinite;
+        @keyframes nameGlow {
+            0%, 100% { 
+                box-shadow: 0 8px 25px rgba(102,126,234,0.5);
+                text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            }
+            50% { 
+                box-shadow: 0 12px 35px rgba(255,107,107,0.6);
+                text-shadow: 0 0 15px rgba(255,107,107,0.8);
+            }
         }
 
-        .kangkang-body {
-            width: 120px;
-            height: 140px;
-            background: linear-gradient(145deg, #ff6b6b, #ee5a24);
-            border-radius: 60px 60px 40px 40px;
-            position: relative;
-            border: 4px solid #333;
-            box-shadow: 
-                0 10px 30px rgba(255,107,107,0.4),
-                inset 0 5px 15px rgba(255,255,255,0.3);
-        }
-
-        .kangkang-head {
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle at 30% 30%, #fdbcb4, #f7a399);
-            border-radius: 50%;
-            position: absolute;
-            top: -50px;
-            left: 10px;
-            border: 4px solid #333;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .kangkang-face {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            font-size: 40px;
-            animation: faceExpressions 4s ease-in-out infinite;
-        }
-
-        .kangkang-hair {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            width: 60px;
-            height: 40px;
-            background: linear-gradient(145deg, #2c3e50, #34495e);
-            border-radius: 60px 60px 0 0;
-            border: 3px solid #333;
-        }
-
-        .kangkang-arm {
-            width: 60px;
-            height: 25px;
-            background: linear-gradient(45deg, #fdbcb4, #f7a399);
-            border-radius: 20px;
-            position: absolute;
-            top: 30px;
-            right: -55px;
-            transform-origin: left center;
-            animation: armThrowPro 1s ease-in-out infinite;
-            border: 3px solid #333;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        @keyframes kangkangBreathe {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.02); }
-        }
-
-        @keyframes faceExpressions {
-            0%, 30% { content: '😤'; }
-            35%, 60% { content: '😠'; }
-            65%, 85% { content: '🤬'; }
-            90%, 100% { content: '😈'; }
-        }
-
-        @keyframes armThrowPro {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-30deg) scale(1.1); }
-            50% { transform: rotate(-70deg) scale(1.2); }
-            75% { transform: rotate(-90deg) scale(1.1); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-
-        /* 对话泡泡升级版 */
+        /* 对话泡泡升级版（时间延长） */
         .speech-bubble {
             position: absolute;
-            bottom: 280px;
-            left: 30px;
-            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(240,240,240,0.9));
-            backdrop-filter: blur(10px);
-            padding: 20px 25px;
-            border-radius: 25px;
-            border: 3px solid rgba(255,107,107,0.6);
-            font-size: 16px;
+            bottom: 320px;
+            left: 20px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(248,248,248,0.95));
+            backdrop-filter: blur(15px);
+            padding: 25px 30px;
+            border-radius: 30px;
+            border: 4px solid rgba(255,107,107,0.7);
+            font-size: 18px;
             font-weight: 700;
             color: #333;
-            max-width: 280px;
-            animation: bubbleAnimation 5s ease-in-out;
+            max-width: 320px;
+            min-height: 60px;
+            animation: bubbleAnimationLong 8s ease-in-out;
             z-index: 60;
             box-shadow: 
-                0 10px 30px rgba(255,107,107,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.8);
+                0 15px 40px rgba(255,107,107,0.4),
+                inset 0 2px 0 rgba(255,255,255,0.9);
         }
 
         .speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -20px;
-            left: 50px;
+            bottom: -25px;
+            left: 60px;
             width: 0;
             height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 20px solid rgba(255,255,255,0.95);
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 25px solid rgba(255,255,255,0.98);
         }
 
-        @keyframes bubbleAnimation {
-            0% { opacity: 0; transform: scale(0) rotate(-15deg); }
-            10% { opacity: 1; transform: scale(1.1) rotate(2deg); }
-            15% { transform: scale(1) rotate(0deg); }
-            85% { opacity: 1; transform: scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: scale(0.8) rotate(15deg); }
+        @keyframes bubbleAnimationLong {
+            0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+            8% { opacity: 1; transform: scale(1.1) rotate(3deg); }
+            12% { transform: scale(1) rotate(0deg); }
+            88% { opacity: 1; transform: scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.7) rotate(20deg); }
         }
 
         /* 现代化UI面板 */
@@ -593,7 +779,7 @@
         @media (max-width: 768px) {
             .login-box { padding: 40px; width: 90%; }
             .login-box input { width: 100%; }
-            .kangkang-character { width: 150px; height: 200px; bottom: 20px; left: 20px; }
+            .kangkang-character { width: 180px; height: 240px; bottom: 20px; left: 20px; }
             .leaderboard { width: 280px; top: 20px; right: 20px; }
             .hud-panel { top: 20px; left: 20px; padding: 20px; }
         }
@@ -620,19 +806,54 @@
             <!-- Konva游戏容器 -->
             <div id="gameContainer"></div>
             
-            <!-- 康康角色升级版 -->
+            <!-- 康康角色重新设计 -->
             <div class="kangkang-character" id="kangkangCharacter">
                 <div class="character-container">
-                    <div class="character-name">⚡ 首推康康 ⚡</div>
-                    <div class="kangkang-avatar">
-                        <div class="kangkang-body">
-                            <div class="kangkang-head">
-                                <div class="kangkang-hair"></div>
-                                <div class="kangkang-face">😤</div>
+                    <div class="kangkang-figure">
+                        <!-- 头部 -->
+                        <div class="kangkang-head">
+                            <div class="kangkang-hair">
+                                <div class="hair-strand"></div>
+                                <div class="hair-strand"></div>
                             </div>
-                            <div class="kangkang-arm"></div>
+                            <div class="kangkang-face">
+                                <div class="eye left"></div>
+                                <div class="eye right"></div>
+                                <div class="face-expression">😤</div>
+                                <div class="mouth"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 身体 -->
+                        <div class="kangkang-body">
+                            <div class="shirt-detail">
+                                <div class="button"></div>
+                                <div class="button"></div>
+                                <div class="button"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 手臂 -->
+                        <div class="kangkang-arm arm-left">
+                            <div class="hand"></div>
+                        </div>
+                        <div class="kangkang-arm arm-right">
+                            <div class="hand"></div>
+                        </div>
+                        
+                        <!-- 腿部 -->
+                        <div class="kangkang-legs">
+                            <div class="leg left">
+                                <div class="shoe"></div>
+                            </div>
+                            <div class="leg right">
+                                <div class="shoe"></div>
+                            </div>
                         </div>
                     </div>
+                    
+                    <!-- 人物名字（放在下方） -->
+                    <div class="character-name">⚡ 首推康康 ⚡</div>
                 </div>
             </div>
 
@@ -809,14 +1030,14 @@
         let gameTimer = null;
         let spawnTimer = null;
 
-        // 平底锅类型定义（升级版）
+        // 平底锅类型定义（升级版 - 添加速度分级）
         const panTypes = {
             oa_process: {
                 name: 'OA流程锅',
                 color: '#ff6b6b',
-                points: 100,
+                basePoints: 100,
                 size: 70,
-                speed: 1,
+                speedRange: [0.8, 1.2],
                 complaints: [
                     '这个OA流程太复杂了！', '谁设计的破流程！', '我不管，小欧你来！', '流程走不通啊！',
                     '系统又卡了！', '这个审批要等到什么时候！', '流程设计有问题！', '我不会操作这个！',
@@ -828,9 +1049,9 @@
             customer_service: {
                 name: '客服甩锅',
                 color: '#4834d4',
-                points: 150,
+                basePoints: 150,
                 size: 75,
-                speed: 1.2,
+                speedRange: [1.0, 1.5],
                 complaints: [
                     '客户的事运营管！', '不是我负责的！', '找康康去！', '这个我不处理！',
                     '客户太难伺候了！', '这个问题很复杂！', '不在我的职责范围！', '我只是传达消息！',
@@ -843,9 +1064,9 @@
             quality_issue: {
                 name: '质量问题锅',
                 color: '#ff9f43',
-                points: 200,
+                basePoints: 200,
                 size: 80,
-                speed: 0.8,
+                speedRange: [0.5, 1.0],
                 complaints: [
                     '药品压损不关我事！', '这是物流问题！', '退群算了！', '质量部门负责！',
                     '不是我们的货！', '供应商的问题！', '运输途中的事！', '包装不是我负责的！',
@@ -859,9 +1080,9 @@
             meeting_pot: {
                 name: '开会甩锅',
                 color: '#00d2d3',
-                points: 120,
+                basePoints: 120,
                 size: 65,
-                speed: 1.5,
+                speedRange: [1.3, 2.0],
                 complaints: [
                     '开什么会啊！', '浪费时间！', '我先退了！', '会议太多了！',
                     '没有意义的会！', '我有其他事！', '会议效率低！', '又要开会！',
@@ -875,9 +1096,9 @@
             boss_pot: {
                 name: '老板锅',
                 color: '#feca57',
-                points: 300,
+                basePoints: 300,
                 size: 90,
-                speed: 0.6,
+                speedRange: [0.3, 0.8],
                 complaints: [
                     '老板的锅我不背！', '这是管理问题！', '我只是执行的！', '决策不是我定的！',
                     '老板没说清楚！', '指示模糊不清！', '我按要求做的！', '这个要问老板！',
@@ -893,9 +1114,9 @@
             bonus_pot: {
                 name: '奖励金锅',
                 color: '#f1c40f',
-                points: 500,
+                basePoints: 500,
                 size: 85,
-                speed: 2,
+                speedRange: [1.8, 2.5],
                 complaints: ['奖励！奖励！', '金币get！', '发财啦！'],
                 emoji: '💰',
                 special: true
@@ -903,9 +1124,9 @@
             bomb_pot: {
                 name: '炸弹黑锅',
                 color: '#2c3e50',
-                points: -200,
+                basePoints: -200,
                 size: 95,
-                speed: 0.5,
+                speedRange: [0.2, 0.6],
                 complaints: ['小心爆炸！', '危险！危险！', '这锅有毒！'],
                 emoji: '💣',
                 special: true
@@ -919,10 +1140,11 @@
             '锅来了锅来了！', '甩锅小能手上线！', '这个责任不是我的！', '系统问题找IT！',
             '客户问题找客服！', '质量问题找质检！', '流程问题找运营！', '管理问题找老板！',
             '我只是负责首推！', '退货不是我管的！', 'OA流程太复杂！', '谁设计的破系统！',
-            '甩锅技能MAX！', '锅锅锅，满天飞！', '责任都是别人的！', '我是无辜的！'
+            '甩锅技能MAX！', '锅锅锅，满天飞！', '责任都是别人的！', '我是无辜的！',
+            '又来甩锅啦！', '这锅不是我的！', '责任推卸中...', '我什么都不知道！'
         ];
 
-        // 平底锅类（使用Konva.js重构）
+        // 平底锅类（使用Konva.js重构 - 添加速度影响得分）
         class PanPro {
             constructor(type) {
                 this.type = type;
@@ -931,27 +1153,34 @@
                 this.x = 150;
                 this.y = gameEngine.height - 100;
                 
+                // 随机速度系数（在指定范围内）
+                const speedRange = this.data.speedRange;
+                this.speedMultiplier = Math.random() * (speedRange[1] - speedRange[0]) + speedRange[0];
+                
+                // 根据速度计算得分（速度越快得分越高）
+                this.points = Math.round(this.data.basePoints * (0.5 + this.speedMultiplier));
+                
                 // 多样化飞行路径
                 const throwStyle = Math.floor(Math.random() * 5);
                 switch(throwStyle) {
                     case 0: // 高抛物线
-                        this.vx = (Math.random() * 10 + 12) * this.data.speed;
+                        this.vx = (Math.random() * 10 + 12) * this.speedMultiplier;
                         this.vy = -(Math.random() * 18 + 18);
                         break;
                     case 1: // 低平抛
-                        this.vx = (Math.random() * 15 + 15) * this.data.speed;
+                        this.vx = (Math.random() * 15 + 15) * this.speedMultiplier;
                         this.vy = -(Math.random() * 8 + 8);
                         break;
                     case 2: // 中等弧度
-                        this.vx = (Math.random() * 12 + 12) * this.data.speed;
+                        this.vx = (Math.random() * 12 + 12) * this.speedMultiplier;
                         this.vy = -(Math.random() * 12 + 12);
                         break;
                     case 3: // 超远距离
-                        this.vx = (Math.random() * 18 + 18) * this.data.speed;
+                        this.vx = (Math.random() * 18 + 18) * this.speedMultiplier;
                         this.vy = -(Math.random() * 22 + 22);
                         break;
                     case 4: // 随机弹跳
-                        this.vx = (Math.random() * 8 + 10) * this.data.speed;
+                        this.vx = (Math.random() * 8 + 10) * this.speedMultiplier;
                         this.vy = -(Math.random() * 15 + 20);
                         this.bouncy = true;
                         break;
@@ -959,7 +1188,7 @@
                 
                 this.gravity = 0.5;
                 this.rotation = 0;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.5;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.5 * this.speedMultiplier;
                 this.size = this.data.size + Math.random() * 20;
                 this.trail = [];
                 
@@ -973,7 +1202,8 @@
                     y: this.y
                 });
 
-                // 创建主体圆形
+                // 创建主体圆形（根据速度调整颜色深度）
+                const colorIntensity = Math.min(1, this.speedMultiplier / 2);
                 this.circle = new Konva.Circle({
                     radius: this.size / 2,
                     fill: this.data.color,
@@ -981,7 +1211,8 @@
                     strokeWidth: 4,
                     shadowColor: 'rgba(0,0,0,0.5)',
                     shadowBlur: 10,
-                    shadowOffset: { x: 5, y: 5 }
+                    shadowOffset: { x: 5, y: 5 },
+                    opacity: 0.8 + colorIntensity * 0.2
                 });
 
                 // 创建锅柄
@@ -1009,6 +1240,18 @@
                     offsetX: this.size / 5,
                     offsetY: this.size / 5
                 });
+
+                // 速度指示器（快速锅子有光环效果）
+                if (this.speedMultiplier > 1.5) {
+                    this.speedGlow = new Konva.Circle({
+                        radius: this.size / 2 + 8,
+                        stroke: '#ffff00',
+                        strokeWidth: 3,
+                        opacity: 0.6,
+                        dash: [5, 5]
+                    });
+                    this.group.add(this.speedGlow);
+                }
 
                 // 添加到组
                 this.group.add(this.circle);
@@ -1039,6 +1282,11 @@
                 this.group.y(this.y);
                 this.group.rotation(this.rotation);
 
+                // 速度光环动画
+                if (this.speedGlow) {
+                    this.speedGlow.rotation(this.speedGlow.rotation() + 2);
+                }
+
                 // 添加轨迹点
                 this.trail.push({ x: this.x, y: this.y });
                 if (this.trail.length > 15) {
@@ -1064,8 +1312,8 @@
                     this.trailLine = new Konva.Line({
                         points: points,
                         stroke: this.data.color,
-                        strokeWidth: 6,
-                        opacity: 0.4,
+                        strokeWidth: Math.max(4, 6 * this.speedMultiplier / 2),
+                        opacity: 0.4 + this.speedMultiplier * 0.1,
                         lineCap: 'round',
                         lineJoin: 'round'
                     });
@@ -1106,18 +1354,18 @@
                         }
                     });
                 } else {
-                    // 如果GSAP加载失败，使用简单动画
                     setTimeout(() => {
                         this.destroy();
                     }, 500);
                 }
 
-                return this.data.points;
+                return this.points;
             }
 
             createSliceEffect() {
-                // 创建粒子爆炸效果
-                for (let i = 0; i < 25; i++) {
+                // 创建粒子爆炸效果（根据速度调整粒子数量）
+                const particleCount = Math.round(20 + this.speedMultiplier * 10);
+                for (let i = 0; i < particleCount; i++) {
                     const particle = new Konva.Circle({
                         x: this.x + (Math.random() - 0.5) * this.size,
                         y: this.y + (Math.random() - 0.5) * this.size,
@@ -1131,8 +1379,8 @@
                     // 粒子动画
                     if (typeof gsap !== 'undefined') {
                         gsap.to(particle, {
-                            duration: 1,
-                            x: particle.x() + (Math.random() - 0.5) * 200,
+                            duration: 1 + this.speedMultiplier * 0.5,
+                            x: particle.x() + (Math.random() - 0.5) * 200 * this.speedMultiplier,
                             y: particle.y() + Math.random() * 200 + 100,
                             opacity: 0,
                             scaleX: 0.1,
@@ -1150,7 +1398,7 @@
                     y: this.y,
                     numPoints: 8,
                     innerRadius: 20,
-                    outerRadius: 40,
+                    outerRadius: 40 + this.speedMultiplier * 10,
                     fill: 'white',
                     opacity: 0.8
                 });
@@ -1176,9 +1424,16 @@
                 
                 const complaintElement = document.createElement('div');
                 complaintElement.className = 'slice-complaint-pro';
-                complaintElement.textContent = randomComplaint;
+                complaintElement.textContent = `${randomComplaint} (+${this.points})`;
                 complaintElement.style.left = this.x + 'px';
                 complaintElement.style.top = this.y + 'px';
+                
+                // 快速锅子的特殊样式
+                if (this.speedMultiplier > 1.5) {
+                    complaintElement.style.background = 'linear-gradient(45deg, rgba(255,215,0,0.9), rgba(255,237,78,0.8))';
+                    complaintElement.style.color = '#333';
+                    complaintElement.style.fontWeight = '900';
+                }
                 
                 document.getElementById('gameScreen').appendChild(complaintElement);
                 
@@ -1199,7 +1454,7 @@
                     );
 
                     gsap.to(complaintElement, {
-                        delay: 1.5,
+                        delay: 2,
                         duration: 0.5,
                         y: this.y - 100,
                         opacity: 0,
@@ -1211,12 +1466,11 @@
                         }
                     });
                 } else {
-                    // 简单动画后备方案
                     setTimeout(() => {
                         if (complaintElement.parentNode) {
                             complaintElement.parentNode.removeChild(complaintElement);
                         }
-                    }, 2000);
+                    }, 2500);
                 }
             }
 
@@ -1498,7 +1752,7 @@
                 fontSize: 32,
                 fontFamily: 'Orbitron',
                 fontStyle: 'bold',
-                fill: 'white',
+                fill: points > 200 ? '#f1c40f' : 'white',
                 stroke: '#333',
                 strokeWidth: 2,
                 offsetX: 20,
@@ -1549,7 +1803,7 @@
             showKangkangSpeech();
         }
 
-        // 康康说话
+        // 康康说话（延长到5秒）
         function showKangkangSpeech() {
             const bubble = document.getElementById('speechBubble');
             const randomComplaint = kangkangComplaints[Math.floor(Math.random() * kangkangComplaints.length)];
@@ -1561,10 +1815,10 @@
                 gsap.fromTo(bubble, 
                     {
                         scale: 0,
-                        rotation: -15
+                        rotation: -20
                     },
                     {
-                        duration: 0.4,
+                        duration: 0.5,
                         scale: 1,
                         rotation: 0,
                         ease: "back.out(1.7)"
@@ -1573,18 +1827,18 @@
                 
                 setTimeout(() => {
                     gsap.to(bubble, {
-                        duration: 0.3,
+                        duration: 0.4,
                         scale: 0,
-                        rotation: 15,
+                        rotation: 20,
                         onComplete: () => {
                             bubble.classList.add('hidden');
                         }
                     });
-                }, 4000);
+                }, 6000); // 延长到6秒
             } else {
                 setTimeout(() => {
                     bubble.classList.add('hidden');
-                }, 4000);
+                }, 6000);
             }
         }
 

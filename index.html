@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>康康老师的质量问题踢皮球大战</title>
+    <title>康康老师退群大师</title>
     <style>
         body {
             margin: 0;
@@ -26,119 +26,97 @@
             border: 3px solid #ff6b6b;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: #f8f9fa;
+            cursor: pointer;
         }
         
         .title {
             color: #fff;
-            font-size: 1.8em;
-            margin-bottom: 20px;
+            font-size: 2.2em;
+            margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            animation: bounce 2s infinite;
         }
         
-        .department-scores {
+        .game-ui {
             display: flex;
             justify-content: space-between;
             color: #fff;
-            font-size: 1em;
+            font-size: 1.2em;
             margin-top: 15px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            gap: 20px;
         }
         
-        .score-box {
+        .score-item {
+            background: rgba(255,255,255,0.2);
             padding: 8px 15px;
-            border-radius: 10px;
-            border: 2px solid;
-            min-width: 120px;
-        }
-        
-        .quality-score {
-            background: rgba(46, 204, 113, 0.8);
-            border-color: #27ae60;
-        }
-        
-        .procurement-score {
-            background: rgba(231, 76, 60, 0.8);
-            border-color: #c0392b;
-        }
-        
-        .operations-score {
-            background: rgba(52, 152, 219, 0.8);
-            border-color: #2980b9;
-        }
-        
-        .customer-pressure {
-            background: rgba(155, 89, 182, 0.8);
-            border-color: #8e44ad;
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
         }
         
         .instructions {
             color: #fff;
-            font-size: 0.9em;
+            font-size: 1em;
             margin-top: 10px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            max-width: 900px;
         }
-        
-        .emergency-btn {
+
+        .game-over-screen {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .restart-btn {
+            background: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 25px;
             font-size: 16px;
             cursor: pointer;
-            animation: emergencyPulse 1s infinite;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-top: 15px;
         }
-        
-        @keyframes emergencyPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+
+        .restart-btn:hover {
+            background: #c0392b;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1 class="title">🔥 康康老师的质量问题踢皮球大作战 🔥</h1>
-        <button class="emergency-btn" onclick="createEmergencyIssue()">🚨 紧急质量问题</button>
-        <canvas id="gameCanvas" width="900" height="650"></canvas>
-        <div class="department-scores">
-            <div class="score-box quality-score">
-                🔍 质管部<br>
-                拉群次数: <span id="qualityScore">0</span><br>
-                无语指数: <span id="frustrationLevel">0</span>
+        <h1 class="title">🚪💨 康康老师退群大师 💨🚪</h1>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="game-ui">
+            <div class="score-item">
+                🎯 分数: <span id="score">0</span>
             </div>
-            <div class="score-box procurement-score">
-                🛒 采购部 (康康)<br>
-                退群次数: <span id="procurementScore">0</span><br>
-                甩锅成功: <span id="procurementDodge">0</span>
+            <div class="score-item">
+                🔥 连击: <span id="combo">0</span>
             </div>
-            <div class="score-box operations-score">
-                📊 运营部<br>
-                反击次数: <span id="operationsScore">0</span><br>
-                吐槽次数: <span id="operationsComplaint">0</span>
+            <div class="score-item">
+                ⏱️ 时间: <span id="timeLeft">60</span>
             </div>
-            <div class="score-box customer-pressure">
-                😡 客户压力<br>
-                催促次数: <span id="customerPressure">0</span><br>
-                愤怒值: <span id="customerAnger">0</span>
+            <div class="score-item">
+                📱 群聊: <span id="groupCount">0</span>
             </div>
         </div>
+        
         <div class="instructions">
-            点击质量问题让质管拉群！点击康康让他退群！按空格键运营吐槽！按R键采购甩锅！客户越来越愤怒！
+            点击康康老师帮他退群！速度要快，不然他会被迫解决问题！
+        </div>
+
+        <div class="game-over-screen" id="gameOverScreen">
+            <h2>🎮 游戏结束！</h2>
+            <div id="finalStats"></div>
+            <button class="restart-btn" onclick="restartGame()">🔄 再来一局</button>
         </div>
     </div>
 
@@ -146,192 +124,99 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
-        // 分数元素
-        const qualityScoreElement = document.getElementById('qualityScore');
-        const procurementScoreElement = document.getElementById('procurementScore');
-        const operationsScoreElement = document.getElementById('operationsScore');
-        const customerPressureElement = document.getElementById('customerPressure');
-        const frustrationLevelElement = document.getElementById('frustrationLevel');
-        const procurementDodgeElement = document.getElementById('procurementDodge');
-        const operationsComplaintElement = document.getElementById('operationsComplaint');
-        const customerAngerElement = document.getElementById('customerAnger');
-        
         // 游戏状态
-        let gameStats = {
-            qualityGroupCreated: 0,
-            procurementQuits: 0,
-            operationsComplaints: 0,
-            customerPressure: 0,
-            frustrationLevel: 0,
-            procurementDodge: 0,
-            customerAnger: 0
+        let gameState = {
+            score: 0,
+            combo: 0,
+            timeLeft: 60,
+            groupCount: 0,
+            gameRunning: true,
+            spawnRate: 1500, // 群聊出现频率
+            lastSpawn: 0
         };
         
-        let qualityIssues = [];
-        let groupChats = [];
-        let excuses = [];
+        // UI元素
+        const scoreElement = document.getElementById('score');
+        const comboElement = document.getElementById('combo');
+        const timeElement = document.getElementById('timeLeft');
+        const groupCountElement = document.getElementById('groupCount');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalStatsElement = document.getElementById('finalStats');
+        
+        let groups = [];
         let particles = [];
-        let customerComplaints = [];
-        let flowchartSteps = [];
+        let floatingTexts = [];
         
-        // 角色定义
-        let characters = {
-            qualityManager: {
-                x: 150,
-                y: canvas.height - 150,
-                mood: 'stressed',
-                name: '质管小王',
-                armAngle: 0,
-                isCreatingGroup: false
-            },
-            kangkangTeacher: {
-                x: 450,
-                y: canvas.height - 150,
-                mood: 'avoidance',
-                name: '康康老师',
-                armAngle: 0,
-                isQuitting: false,
-                quitCount: 0
-            },
-            operationsManager: {
-                x: 750,
-                y: canvas.height - 150,
-                mood: 'frustrated',
-                name: '运营阿明',
-                armAngle: 0,
-                isComplaining: false
-            }
-        };
-        
-        // 质量问题类型
-        const qualityIssueTypes = [
-            { name: "产品尺寸偏差", severity: 3, urgency: "中等", color: "#f39c12", customerImpact: "中" },
-            { name: "材料质量问题", severity: 4, urgency: "紧急", color: "#e74c3c", customerImpact: "高" },
-            { name: "包装破损", severity: 2, urgency: "一般", color: "#3498db", customerImpact: "低" },
-            { name: "颜色差异", severity: 3, urgency: "中等", color: "#9b59b6", customerImpact: "中" },
-            { name: "功能缺陷", severity: 5, urgency: "紧急", color: "#c0392b", customerImpact: "极高" },
-            { name: "标签错误", severity: 2, urgency: "一般", color: "#27ae60", customerImpact: "低" },
-            { name: "数量短缺", severity: 4, urgency: "紧急", color: "#e67e22", customerImpact: "高" },
-            { name: "交货延迟", severity: 3, urgency: "中等", color: "#34495e", customerImpact: "中" }
+        // 康康老师退群语录（简短版）
+        const quitMessages = [
+            "我去开会了",
+            "网络不好",
+            "妈妈叫我吃饭",
+            "手机没电了",
+            "突然有事",
+            "信号不好",
+            "先忙了",
+            "改天再聊",
+            "有急事",
+            "不好意思啊"
         ];
         
-        // 康康老师退群借口
-        const kangkangQuitExcuses = [
-            "这个我不是很清楚，你们先聊",
-            "我这边在开会，先退了",
-            "这个问题不在我们采购范围内",
-            "供应商的问题应该找运营协调",
-            "我需要先了解情况，回头再说",
-            "这个流程我们没参与过",
-            "让我先问问领导什么意思",
-            "我手机要没电了，先撤",
-            "我以为这是运营负责的",
-            "稍等，我妈喊我吃饭",
-            "这个我需要查一下合同",
-            "信号不好，我先走了"
+        // 群聊类型
+        const groupTypes = [
+            { name: "质量问题", color: "#e74c3c", points: 10, duration: 3000 },
+            { name: "紧急协调", color: "#f39c12", points: 15, duration: 2500 },
+            { name: "客户投诉", color: "#8e44ad", points: 20, duration: 2000 },
+            { name: "供应商问题", color: "#e67e22", points: 12, duration: 2800 },
+            { name: "成本超标", color: "#c0392b", points: 25, duration: 1800 }
         ];
         
-        // 运营部吐槽语录
-        const operationsComplaints = [
-            "又是采购的锅！",
-            "供应商都是采购找的好吧！",
-            "这个明明应该采购负责！",
-            "康康老师又跑路了！",
-            "采购为什么不把关质量？",
-            "这种问题应该在采购环节发现！",
-            "每次都让我们运营背锅！",
-            "采购的工作就是确保质量啊！",
-            "康康老师专业甩锅三十年！",
-            "质管拉群采购秒退，我笑了",
-            "采购部就会踢皮球！",
-            "客户都要气死了还在推诿！"
-        ];
-        
-        // 质管无语语录
-        const qualityManagerComplains = [
-            "我已经拉群三次了！",
-            "能不能认真解决问题？",
-            "客户都催疯了！",
-            "这个流程到底谁负责？",
-            "康康老师又退群了...",
-            "我太难了...",
-            "能不能别推来推去？",
-            "这样下去客户要投诉了！",
-            "我只是想解决问题啊！",
-            "为什么每次都这样？",
-            "大家能不能配合一下？",
-            "我的血压要上来了！"
-        ];
-        
-        // 客户愤怒语录
-        const customerAngryComments = [
-            "什么时候能解决？！",
-            "这都第几天了？",
-            "你们到底行不行？",
-            "我要投诉！",
-            "服务态度太差了！",
-            "下次不合作了！",
-            "这种质量还敢卖？",
-            "我要找你们老板！",
-            "赔偿方案呢？",
-            "耽误我们生产了！",
-            "紧急紧急紧急！",
-            "马上给我处理！"
-        ];
-        
-        // 采购甩锅语录
-        const procurementDodgeExcuses = [
-            "这是质量问题，应该质管负责",
-            "我们只负责下单，不管质量",
-            "合同里没写这个责任",
-            "供应商问题找运营协调",
-            "这种技术问题我们不懂",
-            "按流程应该是运营处理",
-            "我们采购只管价格和交期",
-            "质量标准是运营定的",
-            "这个需要技术部门介入",
-            "我们已经按要求下单了",
-            "后续问题不归我们管",
-            "运营应该和客户解释"
-        ];
-        
-        // 质量问题类
-        class QualityIssue {
+        // 群聊类
+        class Group {
             constructor() {
-                this.reset();
-                this.type = qualityIssueTypes[Math.floor(Math.random() * qualityIssueTypes.length)];
-                this.id = 'QC' + Date.now().toString().slice(-6);
-                this.status = 'pending';
-                this.assignedTo = 'none';
-                this.customerComplaintCount = 0;
-            }
-            
-            reset() {
                 this.x = Math.random() * (canvas.width - 200) + 100;
-                this.y = -100;
-                this.vy = Math.random() * 1 + 0.5;
+                this.y = Math.random() * (canvas.height - 150) + 75;
+                this.type = groupTypes[Math.floor(Math.random() * groupTypes.length)];
+                this.width = 180;
+                this.height = 120;
+                this.life = this.type.duration;
+                this.maxLife = this.type.duration;
                 this.clicked = false;
-                this.blinkTimer = 0;
+                this.kangkangState = 'thinking'; // thinking, speaking, leaving
+                this.message = '';
+                this.messageTimer = 0;
+                this.scale = 0.1;
+                this.growing = true;
+                
+                // 康康老师会在一定时间后自动退群
+                this.autoQuitTime = Math.random() * 1000 + 1500;
             }
             
-            update() {
-                if (!this.clicked) {
-                    this.y += this.vy;
-                    this.blinkTimer += 0.1;
-                    
-                    // 客户催促
-                    if (Math.random() < 0.002) {
-                        this.customerComplaintCount++;
-                        gameStats.customerPressure++;
-                        gameStats.customerAnger++;
-                        customerPressureElement.textContent = gameStats.customerPressure;
-                        customerAngerElement.textContent = gameStats.customerAnger;
-                        this.showCustomerComplaint();
+            update(deltaTime) {
+                if (this.clicked) return;
+                
+                // 群聊出现动画
+                if (this.growing && this.scale < 1) {
+                    this.scale += 0.05;
+                    if (this.scale >= 1) {
+                        this.scale = 1;
+                        this.growing = false;
                     }
                 }
                 
-                if (this.y > canvas.height + 100) {
-                    this.reset();
+                this.life -= deltaTime;
+                this.messageTimer += deltaTime;
+                this.autoQuitTime -= deltaTime;
+                
+                // 康康老师状态变化
+                if (this.kangkangState === 'thinking' && this.messageTimer > 800) {
+                    this.kangkangState = 'speaking';
+                    this.message = quitMessages[Math.floor(Math.random() * quitMessages.length)];
+                    this.messageTimer = 0;
+                }
+                
+                // 自动退群
+                if (this.autoQuitTime <= 0 && !this.clicked) {
+                    this.autoQuit();
                 }
             }
             
@@ -339,234 +224,171 @@
                 if (this.clicked) return;
                 
                 ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.scale(this.scale, this.scale);
                 
-                // 根据严重程度闪烁
-                const alpha = this.type.severity > 3 ? 
-                    0.8 + Math.sin(this.blinkTimer) * 0.2 : 0.9;
-                ctx.globalAlpha = alpha;
-                
-                // 绘制问题单
+                // 群聊窗口
                 ctx.fillStyle = this.type.color;
                 ctx.strokeStyle = '#2c2c2c';
-                ctx.lineWidth = 2;
-                
-                const width = 160;
-                const height = 100;
+                ctx.lineWidth = 3;
                 
                 ctx.beginPath();
-                ctx.roundRect(this.x - width/2, this.y - height/2, width, height, 10);
+                ctx.roundRect(-this.width/2, -this.height/2, this.width, this.height, 15);
                 ctx.fill();
                 ctx.stroke();
                 
-                // 问题详情
+                // 群聊标题
                 ctx.fillStyle = '#fff';
-                ctx.font = '12px Microsoft YaHei';
+                ctx.font = 'bold 14px Microsoft YaHei';
                 ctx.textAlign = 'center';
+                ctx.fillText(`💬 ${this.type.name}`, 0, -this.height/2 + 20);
                 
-                ctx.fillText(`🚨 ${this.type.name}`, this.x, this.y - 25);
-                ctx.fillText(`严重度: ${'⭐'.repeat(this.type.severity)}`, this.x, this.y - 5);
-                ctx.fillText(`紧急度: ${this.type.urgency}`, this.x, this.y + 10);
-                ctx.fillText(`客户影响: ${this.type.customerImpact}`, this.x, this.y + 25);
+                // 康康老师头像
+                ctx.fillStyle = '#fdbcb4';
+                ctx.beginPath();
+                ctx.arc(-40, -10, 25, 0, Math.PI * 2);
+                ctx.fill();
                 
-                // 问题编号
-                ctx.font = '10px Arial';
-                ctx.fillText(`ID: ${this.id}`, this.x, this.y + 40);
+                // 康康老师表情
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                if (this.kangkangState === 'thinking') {
+                    // 思考的眼神
+                    ctx.arc(-46, -15, 2, 0, Math.PI * 2);
+                    ctx.arc(-34, -15, 2, 0, Math.PI * 2);
+                } else {
+                    // 准备跑路的眼神
+                    ctx.ellipse(-46, -15, 3, 1, 0, 0, Math.PI * 2);
+                    ctx.ellipse(-34, -15, 3, 1, 0, 0, Math.PI * 2);
+                }
+                ctx.fill();
                 
-                // 客户催促次数
-                if (this.customerComplaintCount > 0) {
+                // 嘴巴
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                if (this.kangkangState === 'speaking') {
+                    ctx.arc(-40, -5, 4, 0, Math.PI);
+                } else {
+                    ctx.moveTo(-44, -5);
+                    ctx.lineTo(-36, -5);
+                }
+                ctx.stroke();
+                
+                // 康康老师名字
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px Microsoft YaHei';
+                ctx.fillText('康康老师', -40, 20);
+                
+                // 消息气泡
+                if (this.message) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                    ctx.strokeStyle = this.type.color;
+                    ctx.lineWidth = 2;
+                    
+                    const msgWidth = this.message.length * 8 + 20;
+                    ctx.beginPath();
+                    ctx.roundRect(20 - msgWidth/2, -30, msgWidth, 25, 10);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#333';
+                    ctx.font = '11px Microsoft YaHei';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(this.message, 20, -12);
+                }
+                
+                // 生命值条
+                const lifePercent = this.life / this.maxLife;
+                ctx.fillStyle = lifePercent > 0.5 ? '#27ae60' : lifePercent > 0.2 ? '#f39c12' : '#e74c3c';
+                ctx.fillRect(-this.width/2, this.height/2 - 10, this.width * lifePercent, 6);
+                
+                // 点击提示
+                if (this.kangkangState === 'speaking') {
                     ctx.fillStyle = '#e74c3c';
-                    ctx.font = '14px Arial';
-                    ctx.fillText(`😡 客户催促 ${this.customerComplaintCount} 次`, this.x, this.y - 45);
+                    ctx.font = 'bold 12px Microsoft YaHei';
+                    ctx.fillText('👆 快点击康康！', 0, this.height/2 + 20);
                 }
                 
                 ctx.restore();
             }
             
             checkClick(mouseX, mouseY) {
-                const width = 160;
-                const height = 100;
-                return !this.clicked && 
-                       mouseX > this.x - width/2 && 
-                       mouseX < this.x + width/2 &&
-                       mouseY > this.y - height/2 && 
-                       mouseY < this.y + height/2;
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                return Math.sqrt(dx * dx + dy * dy) < 60 && !this.clicked;
             }
             
-            createGroup() {
+            onClick() {
                 if (this.clicked) return;
                 
                 this.clicked = true;
-                this.status = 'group_created';
                 
-                // 质管创建群聊
-                gameStats.qualityGroupCreated++;
-                qualityScoreElement.textContent = gameStats.qualityGroupCreated;
+                // 计分
+                let points = this.type.points;
+                if (gameState.combo > 0) {
+                    points += Math.floor(gameState.combo / 2);
+                }
                 
-                // 创建群聊
-                groupChats.push(new GroupChat(this));
+                gameState.score += points;
+                gameState.combo++;
+                scoreElement.textContent = gameState.score;
+                comboElement.textContent = gameState.combo;
                 
-                // 质管小王的动作
-                characters.qualityManager.isCreatingGroup = true;
-                setTimeout(() => {
-                    characters.qualityManager.isCreatingGroup = false;
-                }, 1000);
+                // 创建粒子效果
+                this.createParticles('#27ae60');
                 
-                // 显示质管的话
-                showExcuse(characters.qualityManager.x, characters.qualityManager.y - 80, 
-                    ["大家快来解决这个质量问题！"], '#27ae60');
+                // 显示得分文字
+                floatingTexts.push(new FloatingText(this.x, this.y, `+${points}`, '#27ae60'));
                 
-                // 粒子效果
-                for (let i = 0; i < 10; i++) {
-                    particles.push(new Particle(this.x, this.y, '#27ae60'));
+                // 连击奖励
+                if (gameState.combo % 5 === 0) {
+                    floatingTexts.push(new FloatingText(this.x, this.y - 30, `${gameState.combo}连击！`, '#f39c12'));
+                }
+                
+                // 游戏加速
+                if (gameState.spawnRate > 500) {
+                    gameState.spawnRate -= 20;
                 }
             }
             
-            showCustomerComplaint() {
-                const complaint = customerAngryComments[Math.floor(Math.random() * customerAngryComments.length)];
-                showExcuse(this.x, this.y - 60, [complaint], '#8e44ad');
-            }
-        }
-        
-        // 群聊类
-        class GroupChat {
-            constructor(issue) {
-                this.issue = issue;
-                this.x = canvas.width / 2;
-                this.y = 200;
-                this.width = 300;
-                this.height = 150;
-                this.life = 5.0; // 群聊存在时间
-                this.kangkangInGroup = true;
-                this.messages = [
-                    "质管小王创建了群聊",
-                    "质管小王邀请了康康老师、运营阿明"
-                ];
-                this.messageTimer = 0;
+            autoQuit() {
+                if (this.clicked) return;
+                
+                this.clicked = true;
+                gameState.combo = 0; // 失去连击
+                comboElement.textContent = gameState.combo;
+                
+                // 创建失败粒子
+                this.createParticles('#e74c3c');
+                floatingTexts.push(new FloatingText(this.x, this.y, '被迫解决问题！', '#e74c3c'));
             }
             
-            update() {
-                this.life -= 0.01;
-                this.messageTimer += 0.02;
-                
-                // 定期添加消息
-                if (Math.random() < 0.01) {
-                    if (this.kangkangInGroup && Math.random() < 0.3) {
-                        // 康康可能会说话（然后退群）
-                        this.messages.push("康康老师: " + kangkangQuitExcuses[Math.floor(Math.random() * kangkangQuitExcuses.length)]);
-                        // 然后退群
-                        setTimeout(() => {
-                            this.kangkangQuitGroup();
-                        }, 1000);
-                    } else if (Math.random() < 0.2) {
-                        // 运营吐槽
-                        this.messages.push("运营阿明: " + operationsComplaints[Math.floor(Math.random() * operationsComplaints.length)]);
-                    } else if (Math.random() < 0.15) {
-                        // 质管无语
-                        this.messages.push("质管小王: " + qualityManagerComplains[Math.floor(Math.random() * qualityManagerComplains.length)]);
-                    }
-                }
-            }
-            
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = Math.min(this.life / 5.0, 1.0);
-                
-                // 绘制群聊窗口
-                ctx.fillStyle = '#fff';
-                ctx.strokeStyle = '#bdc3c7';
-                ctx.lineWidth = 2;
-                
-                ctx.beginPath();
-                ctx.roundRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height, 10);
-                ctx.fill();
-                ctx.stroke();
-                
-                // 群聊标题
-                ctx.fillStyle = '#2c3e50';
-                ctx.font = 'bold 14px Microsoft YaHei';
-                ctx.textAlign = 'center';
-                ctx.fillText(`💬 质量问题处理群 (${this.issue.id})`, this.x, this.y - this.height/2 + 20);
-                
-                // 成员状态
-                ctx.font = '12px Microsoft YaHei';
-                let memberText = "👥 成员: 质管小王, ";
-                memberText += this.kangkangInGroup ? "康康老师, " : "康康老师(已退出), ";
-                memberText += "运营阿明";
-                ctx.fillText(memberText, this.x, this.y - this.height/2 + 40);
-                
-                // 显示最近的消息
-                ctx.font = '11px Microsoft YaHei';
-                ctx.textAlign = 'left';
-                const recentMessages = this.messages.slice(-3);
-                for (let i = 0; i < recentMessages.length; i++) {
-                    const message = recentMessages[i];
-                    if (message.length > 35) {
-                        ctx.fillText(message.substring(0, 35) + "...", 
-                            this.x - this.width/2 + 10, this.y - 20 + i * 20);
-                    } else {
-                        ctx.fillText(message, 
-                            this.x - this.width/2 + 10, this.y - 20 + i * 20);
-                    }
-                }
-                
-                // 群聊状态
-                if (!this.kangkangInGroup) {
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.font = 'bold 12px Microsoft YaHei';
-                    ctx.textAlign = 'center';
-                    ctx.fillText("⚠️ 康康老师已退出群聊", this.x, this.y + this.height/2 - 10);
-                }
-                
-                ctx.restore();
-            }
-            
-            kangkangQuitGroup() {
-                if (!this.kangkangInGroup) return;
-                
-                this.kangkangInGroup = false;
-                this.messages.push("康康老师退出了群聊");
-                
-                // 更新统计
-                gameStats.procurementQuits++;
-                characters.kangkangTeacher.quitCount++;
-                procurementScoreElement.textContent = gameStats.procurementQuits;
-                
-                // 质管无语
-                gameStats.frustrationLevel++;
-                frustrationLevelElement.textContent = gameStats.frustrationLevel;
-                
-                // 康康退群动作
-                characters.kangkangTeacher.isQuitting = true;
-                setTimeout(() => {
-                    characters.kangkangTeacher.isQuitting = false;
-                }, 1000);
-                
-                // 粒子效果
-                for (let i = 0; i < 8; i++) {
-                    particles.push(new Particle(characters.kangkangTeacher.x, characters.kangkangTeacher.y, '#e74c3c'));
+            createParticles(color) {
+                for (let i = 0; i < 12; i++) {
+                    particles.push(new Particle(this.x, this.y, color));
                 }
             }
         }
         
-        // 粒子效果类
+        // 粒子类
         class Particle {
-            constructor(x, y, color = null) {
+            constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
-                this.vx = (Math.random() - 0.5) * 6;
-                this.vy = (Math.random() - 0.5) * 6;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8;
                 this.life = 1.0;
-                this.decay = Math.random() * 0.02 + 0.01;
-                this.color = color || `hsl(${Math.random() * 60 + 15}, 100%, 50%)`;
+                this.color = color;
                 this.size = Math.random() * 4 + 2;
             }
             
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.life -= this.decay;
-                this.vy += 0.1;
-                this.vx *= 0.99;
+                this.vy += 0.2;
+                this.vx *= 0.98;
+                this.life -= 0.02;
             }
             
             draw() {
@@ -580,399 +402,203 @@
             }
         }
         
-        // 借口气泡类
-        class Excuse {
+        // 浮动文字类
+        class FloatingText {
             constructor(x, y, text, color) {
                 this.x = x;
                 this.y = y;
                 this.text = text;
-                this.life = 3.0;
-                this.vy = -0.8;
                 this.color = color;
+                this.life = 1.5;
+                this.vy = -2;
             }
             
             update() {
                 this.y += this.vy;
-                this.life -= 0.01;
+                this.life -= 0.02;
             }
             
             draw() {
                 ctx.save();
-                ctx.globalAlpha = this.life / 3.0;
-                ctx.fillStyle = '#fff';
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 2;
-                
-                const width = Math.max(this.text.length * 8, 100);
-                const height = 30;
-                
-                ctx.beginPath();
-                ctx.roundRect(this.x - width/2, this.y - height/2, width, height, 12);
-                ctx.fill();
-                ctx.stroke();
-                
-                ctx.beginPath();
-                ctx.moveTo(this.x - 10, this.y + height/2);
-                ctx.lineTo(this.x, this.y + height/2 + 10);
-                ctx.lineTo(this.x + 10, this.y + height/2);
-                ctx.fill();
-                
-                ctx.fillStyle = '#333';
-                ctx.font = '12px Microsoft YaHei';
+                ctx.globalAlpha = this.life / 1.5;
+                ctx.fillStyle = this.color;
+                ctx.font = 'bold 16px Microsoft YaHei';
                 ctx.textAlign = 'center';
-                ctx.fillText(this.text, this.x, this.y + 4);
-                
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.strokeText(this.text, this.x, this.y);
+                ctx.fillText(this.text, this.x, this.y);
                 ctx.restore();
             }
         }
         
-        // 显示借口
-        function showExcuse(x, y, textArray, color) {
-            const randomText = textArray[Math.floor(Math.random() * textArray.length)];
-            excuses.push(new Excuse(x, y, randomText, color));
-        }
-        
-        // 绘制角色
-        function drawCharacter(character, bgColor, emoji) {
-            ctx.save();
-            ctx.translate(character.x, character.y);
-            
-            // 角色背景
-            ctx.fillStyle = `${bgColor}40`;
-            ctx.beginPath();
-            ctx.roundRect(-50, -70, 100, 140, 10);
-            ctx.fill();
-            ctx.strokeStyle = bgColor;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // 角色标识
-            ctx.fillStyle = bgColor;
-            ctx.font = '12px Microsoft YaHei';
-            ctx.textAlign = 'center';
-            ctx.fillText(`${emoji} ${character.name}`, 0, -80);
-            
-            // 身体
-            ctx.fillStyle = '#4a90e2';
-            ctx.fillRect(-20, -30, 40, 60);
-            
-            // 头部
-            let faceColor = '#fdbcb4';
-            if (character.mood === 'stressed') faceColor = '#ffb3b3';
-            else if (character.mood === 'frustrated') faceColor = '#ff9999';
-            
-            ctx.fillStyle = faceColor;
-            ctx.beginPath();
-            ctx.arc(0, -45, 20, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // 表情
-            ctx.fillStyle = '#000';
-            ctx.beginPath();
-            if (character.mood === 'avoidance') {
-                // 康康老师的回避眼神
-                ctx.ellipse(-6, -50, 2, 1, 0, 0, Math.PI * 2);
-                ctx.ellipse(6, -50, 2, 1, 0, 0, Math.PI * 2);
-            } else {
-                ctx.arc(-6, -50, 2, 0, Math.PI * 2);
-                ctx.arc(6, -50, 2, 0, Math.PI * 2);
-            }
-            ctx.fill();
-            
-            // 嘴巴
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            if (character.mood === 'stressed' || character.mood === 'frustrated') {
-                ctx.arc(0, -38, 5, Math.PI, 0); // 愁眉苦脸
-            } else if (character.mood === 'avoidance') {
-                ctx.moveTo(-4, -38);
-                ctx.lineTo(4, -38); // 紧闭嘴巴
-            }
-            ctx.stroke();
-            
-            // 手臂动作
-            ctx.strokeStyle = faceColor;
-            ctx.lineWidth = 6;
-            ctx.lineCap = 'round';
-            
-            if (character.isCreatingGroup) {
-                // 创建群聊手势
-                ctx.save();
-                ctx.rotate(0.5);
-                ctx.beginPath();
-                ctx.moveTo(-20, -15);
-                ctx.lineTo(-35, -25);
-                ctx.stroke();
-                ctx.restore();
-            } else if (character.isQuitting) {
-                // 退群手势
-                ctx.save();
-                ctx.rotate(-0.8);
-                ctx.beginPath();
-                ctx.moveTo(20, -15);
-                ctx.lineTo(40, -10);
-                ctx.stroke();
-                ctx.restore();
-            } else if (character.isComplaining) {
-                // 吐槽手势
-                ctx.save();
-                ctx.rotate(character.armAngle);
-                ctx.beginPath();
-                ctx.moveTo(-20, -15);
-                ctx.lineTo(-40, -20);
-                ctx.stroke();
-                ctx.restore();
-            } else {
-                // 正常手势
-                ctx.save();
-                ctx.rotate(character.armAngle);
-                ctx.beginPath();
-                ctx.moveTo(-20, -15);
-                ctx.lineTo(-35, -20);
-                ctx.moveTo(20, -15);
-                ctx.lineTo(35, -20);
-                ctx.stroke();
-                ctx.restore();
-            }
-            
-            // 特殊状态显示
-            if (character.name === '康康老师' && character.quitCount > 0) {
-                ctx.fillStyle = '#e74c3c';
-                ctx.font = '14px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(`退群 ${character.quitCount} 次`, 0, 50);
-            }
-            
-            ctx.restore();
-        }
-        
-        // 绘制办公室背景
-        function drawOfficeBackground() {
-            // 办公室地面
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-            gradient.addColorStop(0, '#e8f5e8');
-            gradient.addColorStop(0.33, '#f0f0f0');
-            gradient.addColorStop(0.66, '#f0f0f0');
-            gradient.addColorStop(1, '#e8f5e8');
+        // 绘制背景
+        function drawBackground() {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#98FB98');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // 部门分区线
-            ctx.strokeStyle = '#bdc3c7';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 5]);
-            ctx.beginPath();
-            ctx.moveTo(300, 0);
-            ctx.lineTo(300, canvas.height);
-            ctx.moveTo(600, 0);
-            ctx.lineTo(600, canvas.height);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // 部门标识
-            ctx.fillStyle = '#27ae60';
-            ctx.beginPath();
-            ctx.roundRect(50, 30, 200, 40, 8);
-            ctx.fill();
-            ctx.fillStyle = '#fff';
-            ctx.font = '16px Microsoft YaHei';
-            ctx.textAlign = 'center';
-            ctx.fillText('🔍 质量管理部', 150, 55);
-            
-            ctx.fillStyle = '#e74c3c';
-            ctx.beginPath();
-            ctx.roundRect(350, 30, 200, 40, 8);
-            ctx.fill();
-            ctx.fillStyle = '#fff';
-            ctx.fillText('🛒 采购部', 450, 55);
-            
-            ctx.fillStyle = '#3498db';
-            ctx.beginPath();
-            ctx.roundRect(650, 30, 200, 40, 8);
-            ctx.fill();
-            ctx.fillStyle = '#fff';
-            ctx.fillText('📊 运营部', 750, 55);
-            
-            // 流程状态显示
-            ctx.fillStyle = '#2c3e50';
-            ctx.font = '18px Microsoft YaHei';
-            ctx.textAlign = 'center';
-            ctx.fillText('质量问题处理流程状态', canvas.width / 2, 120);
-            
-            // 流程步骤
-            const steps = [
-                { name: '发现问题', status: 'done', color: '#27ae60' },
-                { name: '拉群协调', status: gameStats.qualityGroupCreated > 0 ? 'done' : 'pending', color: '#f39c12' },
-                { name: '责任确认', status: 'stuck', color: '#e74c3c' },
-                { name: '问题解决', status: 'pending', color: '#95a5a6' },
-                { name: '客户反馈', status: 'pending', color: '#95a5a6' }
-            ];
-            
-            for (let i = 0; i < steps.length; i++) {
-                const step = steps[i];
-                const x = 180 + i * 140;
-                const y = 150;
+            // 办公室氛围
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            for (let i = 0; i < 5; i++) {
+                const x = (i * 160 + Date.now() * 0.02) % (canvas.width + 100) - 50;
+                const y = 100 + Math.sin(Date.now() * 0.001 + i) * 30;
                 
-                ctx.fillStyle = step.color;
                 ctx.beginPath();
-                ctx.arc(x, y, 15, 0, Math.PI * 2);
+                ctx.arc(x, y, 30, 0, Math.PI * 2);
                 ctx.fill();
-                
-                ctx.fillStyle = '#fff';
-                ctx.font = '12px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText((i + 1).toString(), x, y + 4);
-                
-                ctx.fillStyle = '#2c3e50';
-                ctx.font = '12px Microsoft YaHei';
-                ctx.fillText(step.name, x, y + 35);
-                
-                if (step.status === 'stuck') {
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.fillText('卡住了！', x, y + 50);
-                }
-                
-                // 连接线
-                if (i < steps.length - 1) {
-                    ctx.strokeStyle = '#bdc3c7';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(x + 15, y);
-                    ctx.lineTo(x + 125, y);
-                    ctx.stroke();
-                }
             }
-        }
-        
-        // 初始化游戏
-        function initGame() {
-            for (let i = 0; i < 3; i++) {
-                qualityIssues.push(new QualityIssue());
-                qualityIssues[i].y = i * -200;
-            }
-        }
-        
-        // 创建紧急质量问题
-        function createEmergencyIssue() {
-            const urgentIssue = new QualityIssue();
-            urgentIssue.type = qualityIssueTypes.find(type => type.severity >= 4) || qualityIssueTypes[1];
-            urgentIssue.y = -50;
-            urgentIssue.customerComplaintCount = Math.floor(Math.random() * 3) + 1;
-            qualityIssues.push(urgentIssue);
             
-            // 立即触发客户压力
-            gameStats.customerPressure += 2;
-            gameStats.customerAnger += 3;
-            customerPressureElement.textContent = gameStats.customerPressure;
-            customerAngerElement.textContent = gameStats.customerAnger;
+            // 连击显示
+            if (gameState.combo > 2) {
+                ctx.fillStyle = `hsl(${Math.min(gameState.combo * 15, 60)}, 100%, 50%)`;
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.strokeText(`${gameState.combo}x 连击！`, canvas.width / 2, 50);
+                ctx.fillText(`${gameState.combo}x 连击！`, canvas.width / 2, 50);
+            }
         }
         
         // 游戏主循环
-        function gameLoop() {
+        let lastTime = 0;
+        function gameLoop(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            if (!gameState.gameRunning) return;
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackground();
             
-            drawOfficeBackground();
+            // 生成新群聊
+            if (currentTime - gameState.lastSpawn > gameState.spawnRate) {
+                if (groups.filter(g => !g.clicked).length < 4) { // 最多4个群聊
+                    groups.push(new Group());
+                    gameState.groupCount++;
+                    groupCountElement.textContent = gameState.groupCount;
+                    gameState.lastSpawn = currentTime;
+                }
+            }
             
-            // 更新和绘制质量问题
-            qualityIssues.forEach(issue => {
-                issue.update();
-                issue.draw();
+            // 更新群聊
+            groups = groups.filter(group => {
+                if (!group.clicked) {
+                    group.update(deltaTime);
+                    group.draw();
+                    return group.life > 0;
+                }
+                return false;
             });
             
-            // 更新和绘制群聊
-            groupChats = groupChats.filter(chat => {
-                chat.update();
-                chat.draw();
-                return chat.life > 0;
-            });
-            
-            // 更新角色动作
-            Object.values(characters).forEach(char => {
-                char.armAngle = Math.sin(Date.now() * 0.003) * 0.2;
-            });
-            
-            // 绘制角色
-            drawCharacter(characters.qualityManager, '#27ae60', '🔍');
-            drawCharacter(characters.kangkangTeacher, '#e74c3c', '🛒');
-            drawCharacter(characters.operationsManager, '#3498db', '📊');
-            
-            // 更新粒子效果
+            // 更新粒子
             particles = particles.filter(particle => {
                 particle.update();
                 particle.draw();
                 return particle.life > 0;
             });
             
-            // 更新借口气泡
-            excuses = excuses.filter(excuse => {
-                excuse.update();
-                excuse.draw();
-                return excuse.life > 0;
+            // 更新浮动文字
+            floatingTexts = floatingTexts.filter(text => {
+                text.update();
+                text.draw();
+                return text.life > 0;
             });
             
             requestAnimationFrame(gameLoop);
         }
         
+        // 游戏计时器
+        function startTimer() {
+            const timer = setInterval(() => {
+                if (!gameState.gameRunning) {
+                    clearInterval(timer);
+                    return;
+                }
+                
+                gameState.timeLeft--;
+                timeElement.textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+        
+        // 结束游戏
+        function endGame() {
+            gameState.gameRunning = false;
+            
+            let rank = '';
+            if (gameState.score >= 500) rank = '🏆 退群大师';
+            else if (gameState.score >= 300) rank = '🥈 甩锅高手';
+            else if (gameState.score >= 150) rank = '🥉 逃避新手';
+            else rank = '😅 还需努力';
+            
+            finalStatsElement.innerHTML = `
+                <h3>${rank}</h3>
+                <p>🎯 总分数: ${gameState.score}</p>
+                <p>🔥 最高连击: ${Math.max(...(gameState.comboHistory || [gameState.combo]))}</p>
+                <p>📱 处理群聊: ${gameState.groupCount}</p>
+                <p>⚡ 退群效率: ${((gameState.score / gameState.groupCount) || 0).toFixed(1)}</p>
+            `;
+            
+            gameOverScreen.style.display = 'block';
+        }
+        
+        // 重新开始游戏
+        function restartGame() {
+            gameState = {
+                score: 0,
+                combo: 0,
+                timeLeft: 60,
+                groupCount: 0,
+                gameRunning: true,
+                spawnRate: 1500,
+                lastSpawn: 0,
+                comboHistory: []
+            };
+            
+            groups = [];
+            particles = [];
+            floatingTexts = [];
+            
+            scoreElement.textContent = gameState.score;
+            comboElement.textContent = gameState.combo;
+            timeElement.textContent = gameState.timeLeft;
+            groupCountElement.textContent = gameState.groupCount;
+            
+            gameOverScreen.style.display = 'none';
+            
+            lastTime = 0;
+            requestAnimationFrame(gameLoop);
+            startTimer();
+        }
+        
         // 鼠标点击事件
         canvas.addEventListener('click', (e) => {
+            if (!gameState.gameRunning) return;
+            
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
-            // 检查是否点击质量问题
-            qualityIssues.forEach(issue => {
-                if (issue.checkClick(x, y)) {
-                    issue.createGroup();
+            // 检查是否点击了群聊中的康康老师
+            let hit = false;
+            groups.forEach(group => {
+                if (group.checkClick(x, y)) {
+                    group.onClick();
+                    hit = true;
                 }
             });
             
-            // 检查是否点击康康老师
-            const kk = characters.kangkangTeacher;
-            if (Math.sqrt((x - kk.x) ** 2 + (y - kk.y) ** 2) < 50) {
-                // 让康康老师退群
-                groupChats.forEach(chat => {
-                    if (chat.kangkangInGroup) {
-                        chat.kangkangQuitGroup();
-                    }
-                });
-            }
-        });
-        
-        // 键盘事件
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                // 运营部吐槽
-                gameStats.operationsComplaints++;
-                operationsComplaintElement.textContent = gameStats.operationsComplaints;
-                
-                characters.operationsManager.isComplaining = true;
-                setTimeout(() => {
-                    characters.operationsManager.isComplaining = false;
-                }, 800);
-                
-                showExcuse(characters.operationsManager.x, characters.operationsManager.y - 80, 
-                    operationsComplaints, '#3498db');
-                
-                for (let i = 0; i < 5; i++) {
-                    particles.push(new Particle(characters.operationsManager.x, 
-                        characters.operationsManager.y, '#3498db'));
-                }
-            } else if (e.code === 'KeyR') {
-                e.preventDefault();
-                // 采购甩锅
-                gameStats.procurementDodge++;
-                procurementDodgeElement.textContent = gameStats.procurementDodge;
-                
-                showExcuse(characters.kangkangTeacher.x, characters.kangkangTeacher.y - 80, 
-                    procurementDodgeExcuses, '#e74c3c');
-                
-                for (let i = 0; i < 5; i++) {
-                    particles.push(new Particle(characters.kangkangTeacher.x, 
-                        characters.kangkangTeacher.y, '#e74c3c'));
-                }
-            }
+            // 记录最高连击
+            if (!gameState.comboHistory) gameState.comboHistory = [];
+            gameState.comboHistory.push(gameState.combo);
         });
         
         // CanvasRenderingContext2D.roundRect polyfill
@@ -992,27 +618,9 @@
             };
         }
         
-        // 初始化游戏
-        initGame();
-        gameLoop();
-        
-        // 游戏说明
-        setTimeout(() => {
-            alert('🔥 质量问题踢皮球大作战游戏说明：\n\n' +
-                  '📋 场景：客户下单后发现质量问题，需要三个部门协调处理\n\n' +
-                  '🎮 操作说明：\n' +
-                  '• 点击质量问题单 → 质管小王拉群协调\n' +
-                  '• 点击康康老师 → 康康老师退群跑路\n' +
-                  '• 按空格键 → 运营阿明吐槽\n' +
-                  '• 按R键 → 采购部甩锅\n' +
-                  '• 右上角按钮 → 创建紧急质量问题\n\n' +
-                  '😂 经典场景还原：\n' +
-                  '• 康康老师各种借口退群："我妈喊我吃饭"\n' +
-                  '• 运营部疯狂吐槽："又是采购的锅！"\n' +
-                  '• 质管小王无语："我已经拉群三次了！"\n' +
-                  '• 客户越来越愤怒："什么时候能解决？！"\n\n' +
-                  '🎯 现实写照：问题永远解决不了，\n但甩锅技能可以无限升级！💀');
-        }, 1000);
+        // 开始游戏
+        requestAnimationFrame(gameLoop);
+        startTimer();
     </script>
 </body>
 </html>

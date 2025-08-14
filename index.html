@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>康康退群大作战 - 甩锅传说</title>
+    <title>康康甩锅切切切 - 药师帮OA大乱斗</title>
     <style>
         * {
             margin: 0;
@@ -13,9 +13,10 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             overflow: hidden;
             user-select: none;
+            cursor: none;
         }
 
         .container {
@@ -31,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -40,48 +41,58 @@
         }
 
         .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            padding: 50px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid #667eea;
         }
 
         .login-box h1 {
             color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
+            margin-bottom: 15px;
+            font-size: 32px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .login-box h2 {
             color: #666;
-            margin-bottom: 30px;
-            font-size: 16px;
+            margin-bottom: 35px;
+            font-size: 18px;
         }
 
         .login-box input {
-            padding: 15px;
-            width: 300px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .login-box button {
-            padding: 15px 30px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
+            padding: 18px;
+            width: 350px;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            font-size: 18px;
+            margin-bottom: 25px;
             transition: all 0.3s;
         }
 
+        .login-box input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 20px rgba(102,126,234,0.3);
+        }
+
+        .login-box button {
+            padding: 18px 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.3);
+        }
+
         .login-box button:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102,126,234,0.4);
         }
 
         /* 游戏界面 */
@@ -91,142 +102,190 @@
             position: relative;
         }
 
-        .game-header {
+        /* 游戏画布 */
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 50%, #90EE90 100%);
+            cursor: none;
+        }
+
+        /* 康康角色 */
+        .kangkang-character {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            width: 120px;
+            height: 150px;
+            z-index: 10;
+        }
+
+        .kangkang-body {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            animation: kangkangBounce 2s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        .kangkang-head {
+            width: 60px;
+            height: 60px;
+            background: #fdbcb4;
+            border-radius: 50%;
+            position: absolute;
+            top: -30px;
+            left: 10px;
+            border: 3px solid #333;
+        }
+
+        .kangkang-face {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+        }
+
+        .kangkang-arm {
+            width: 40px;
+            height: 15px;
+            background: #fdbcb4;
+            border-radius: 10px;
             position: absolute;
             top: 20px;
+            right: -35px;
+            transform-origin: left center;
+            animation: armThrow 1s ease-in-out infinite;
+        }
+
+        @keyframes kangkangBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        @keyframes armThrow {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(-45deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* 对话泡泡 */
+        .speech-bubble {
+            position: absolute;
+            bottom: 180px;
             left: 20px;
-            color: white;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            max-width: 200px;
+            animation: bubbleShow 3s ease-in-out;
+            z-index: 15;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid white;
+        }
+
+        @keyframes bubbleShow {
+            0% { opacity: 0; transform: scale(0); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* UI界面 */
+        .game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .score-panel {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255,255,255,0.9);
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .score-item {
             font-size: 24px;
-            z-index: 100;
-        }
-
-        .score {
+            font-weight: bold;
             margin-bottom: 10px;
+            color: #333;
         }
 
-        .time {
-            margin-bottom: 10px;
-        }
-
-        .level {
-            font-size: 18px;
+        .time-item {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6b6b;
         }
 
         /* 排行榜 */
         .leaderboard {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 15px;
-            width: 250px;
-            max-height: 400px;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 20px;
+            width: 280px;
+            max-height: 500px;
             overflow-y: auto;
-            z-index: 100;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
 
         .leaderboard h3 {
             text-align: center;
             color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
         }
 
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px;
-            margin-bottom: 5px;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
             background: rgba(102,126,234,0.1);
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            background: rgba(102,126,234,0.2);
         }
 
         .leaderboard-item.top3 {
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             font-weight: bold;
-        }
-
-        /* 游戏区域 */
-        .game-area {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            cursor: crosshair;
-        }
-
-        /* 弹出的对象 */
-        .popup-item {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            animation: popup 0.5s ease-out;
-        }
-
-        @keyframes popup {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1) rotate(360deg);
-                opacity: 1;
-            }
-        }
-
-        .popup-item:hover {
-            transform: scale(1.1);
-        }
-
-        .kangkang {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
-        }
-
-        .xiaoou {
-            background: linear-gradient(45deg, #4834d4, #686de0);
-            box-shadow: 0 5px 15px rgba(72,52,212,0.4);
-        }
-
-        .customer {
-            background: linear-gradient(45deg, #ff9f43, #feca57);
-            box-shadow: 0 5px 15px rgba(255,159,67,0.4);
-        }
-
-        .qa-group {
-            background: linear-gradient(45deg, #00d2d3, #54a0ff);
-            box-shadow: 0 5px 15px rgba(0,210,211,0.4);
-        }
-
-        /* 点击效果 */
-        .click-effect {
-            position: absolute;
-            pointer-events: none;
-            font-weight: bold;
-            font-size: 20px;
-            animation: clickEffect 1s ease-out forwards;
-        }
-
-        @keyframes clickEffect {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
+            box-shadow: 0 5px 15px rgba(255,215,0,0.3);
         }
 
         /* 游戏结束界面 */
@@ -236,7 +295,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             display: none;
             justify-content: center;
             align-items: center;
@@ -245,77 +304,81 @@
         }
 
         .game-over-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            padding: 50px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+            border: 3px solid #667eea;
         }
 
         .game-over-box h2 {
             color: #333;
-            margin-bottom: 20px;
-            font-size: 28px;
+            margin-bottom: 25px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .game-over-box p {
             color: #666;
-            margin-bottom: 30px;
-            font-size: 18px;
+            margin-bottom: 35px;
+            font-size: 20px;
         }
 
         .game-over-box button {
-            padding: 15px 30px;
-            background: #667eea;
+            padding: 18px 35px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 15px;
+            font-size: 18px;
             cursor: pointer;
-            margin: 0 10px;
+            margin: 0 15px;
             transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.3);
         }
 
         .game-over-box button:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102,126,234,0.4);
         }
 
-        /* 吐槽气泡 */
-        .complaint-bubble {
+        /* 鼠标刀光效果 */
+        .knife-trail {
             position: absolute;
-            background: rgba(255,255,255,0.95);
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #333;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            animation: bubbleFloat 3s ease-out forwards;
-            z-index: 50;
-            max-width: 200px;
-        }
-
-        @keyframes bubbleFloat {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            20% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            80% {
-                opacity: 1;
-                transform: translateY(-10px);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
+            pointer-events: none;
+            z-index: 5;
         }
 
         .hidden {
             display: none !important;
+        }
+
+        /* 连击效果 */
+        .combo-text {
+            position: absolute;
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: comboAnimation 1s ease-out forwards;
+            z-index: 25;
+            pointer-events: none;
+        }
+
+        @keyframes comboAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) translateY(-20px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) translateY(-50px);
+            }
         }
     </style>
 </head>
@@ -324,41 +387,56 @@
         <!-- 登录界面 -->
         <div class="login-screen" id="loginScreen">
             <div class="login-box">
-                <h1>🏃‍♂️ 康康退群大作战 🏃‍♂️</h1>
-                <h2>甩锅传说 - 药师帮OA流程争夺战</h2>
-                <input type="text" id="nicknameInput" placeholder="请输入您的昵称" maxlength="20">
+                <h1>🔪 康康甩锅切切切 🥘</h1>
+                <h2>药师帮OA大乱斗 - 退群传说</h2>
+                <input type="text" id="nicknameInput" placeholder="请输入您的昵称开始切锅" maxlength="20">
                 <br>
-                <button onclick="startGame()">开始游戏</button>
+                <button onclick="startGame()">开始甩锅大战</button>
             </div>
         </div>
 
         <!-- 游戏界面 -->
         <div class="game-screen hidden" id="gameScreen">
-            <div class="game-header">
-                <div class="score">得分: <span id="score">0</span></div>
-                <div class="time">时间: <span id="time">60</span>s</div>
-                <div class="level">等级: <span id="level">1</span></div>
-            </div>
-
-            <div class="leaderboard" id="leaderboard">
-                <h3>🏆 排行榜 TOP 10</h3>
-                <div id="leaderboardContent">
-                    <!-- 排行榜内容将动态生成 -->
+            <!-- 游戏画布 -->
+            <canvas id="gameCanvas"></canvas>
+            
+            <!-- 康康角色 -->
+            <div class="kangkang-character" id="kangkangCharacter">
+                <div class="kangkang-body">
+                    <div class="kangkang-head">
+                        <div class="kangkang-face">😤</div>
+                    </div>
+                    <div class="kangkang-arm"></div>
                 </div>
             </div>
 
-            <div class="game-area" id="gameArea">
-                <!-- 游戏对象将动态生成 -->
+            <!-- 对话泡泡 -->
+            <div class="speech-bubble hidden" id="speechBubble"></div>
+
+            <!-- 游戏UI -->
+            <div class="game-ui">
+                <div class="score-panel">
+                    <div class="score-item">得分: <span id="score">0</span></div>
+                    <div class="score-item">连击: <span id="combo">0</span></div>
+                    <div class="time-item">时间: <span id="time">60</span>s</div>
+                </div>
+
+                <div class="leaderboard" id="leaderboard">
+                    <h3>🏆 切锅排行榜 TOP 10</h3>
+                    <div id="leaderboardContent">
+                        <!-- 排行榜内容将动态生成 -->
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 游戏结束界面 -->
         <div class="game-over" id="gameOver">
             <div class="game-over-box">
-                <h2 id="gameOverTitle">游戏结束!</h2>
+                <h2 id="gameOverTitle">切锅结束!</h2>
                 <p id="gameOverScore">您的得分: 0</p>
                 <p id="gameOverRank"></p>
-                <button onclick="restartGame()">再来一局</button>
+                <button onclick="restartGame()">再切一轮</button>
                 <button onclick="backToLogin()">返回主页</button>
             </div>
         </div>
@@ -366,11 +444,10 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Firebase配置和认证模块
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-        import { getDatabase, ref, get, set, push, onValue, off } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
         // Firebase配置
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyB3ioWABsutPeZ9LboagtxLLgo2kyi9Xnw",
             authDomain: "zhuye-fb0a6.firebaseapp.com",
@@ -382,7 +459,6 @@
             measurementId: "G-BG1920BDX0"
         };
 
-        // 初始化Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
@@ -390,103 +466,453 @@
         let currentPlayer = '';
         let gameRunning = false;
         let score = 0;
+        let combo = 0;
         let timeLeft = 60;
-        let level = 1;
-        let spawnRate = 2000;
+        let canvas, ctx;
         let gameTimer;
         let spawnTimer;
+        let pans = []; // 平底锅数组
+        let particles = []; // 粒子效果数组
+        let mouseTrail = []; // 鼠标轨迹
+        let spawnRate = 1500;
+        let lastMousePos = { x: 0, y: 0 };
 
-        // 游戏对象类型和吐槽内容
-        const gameObjects = {
-            kangkang: {
-                name: '康康',
-                points: -50,
-                complaints: [
-                    '这明显是运营的事！',
-                    '我管首推，不管退货！',
-                    '小欧你来处理吧',
-                    '退群！',
-                    '这个锅我不背！'
-                ],
-                color: '#ff6b6b'
-            },
-            xiaoou: {
-                name: '小欧',
-                points: 30,
-                complaints: [
-                    '康康你别跑啊！',
-                    '首推的事你不管谁管？',
-                    '客户等着呢！',
-                    '这个流程你熟悉',
-                    '别甩锅给我！'
-                ],
-                color: '#4834d4'
-            },
-            customer: {
-                name: '客户',
+        // 平底锅类型和吐槽内容
+        const panTypes = {
+            oa_process: {
+                name: 'OA流程锅',
+                color: '#ff6b6b',
                 points: 100,
-                complaints: [
-                    '我就要个退货...',
-                    '你们内部解决好吗？',
-                    '药都压坏了！',
-                    '到底谁负责？',
-                    '服务态度呢？'
-                ],
-                color: '#ff9f43'
+                complaints: ['这个OA流程太复杂了！', '谁设计的破流程！', '我不管，小欧你来！'],
+                emoji: '📋'
             },
-            qaGroup: {
-                name: '质量群',
-                points: 50,
-                complaints: [
-                    '大家冷静讨论',
-                    '按流程走',
-                    '康康又退群了...',
-                    '欣姐很无奈',
-                    '代姐也很累'
-                ],
-                color: '#00d2d3'
+            customer_service: {
+                name: '客服甩锅',
+                color: '#4834d4',
+                points: 150,
+                complaints: ['客户的事运营管！', '不是我负责的！', '找康康去！'],
+                emoji: '📞'
+            },
+            quality_issue: {
+                name: '质量问题锅',
+                color: '#ff9f43',
+                points: 200,
+                complaints: ['药品压损不关我事！', '这是物流问题！', '退群算了！'],
+                emoji: '💊'
+            },
+            meeting_pot: {
+                name: '开会甩锅',
+                color: '#00d2d3',
+                points: 120,
+                complaints: ['开什么会啊！', '浪费时间！', '我先退了！'],
+                emoji: '👥'
+            },
+            boss_pot: {
+                name: '老板锅',
+                color: '#feca57',
+                points: 300,
+                complaints: ['老板的锅我不背！', '这是管理问题！', '我只是执行的！'],
+                emoji: '👔'
             }
         };
 
-        // 全局函数
-        window.startGame = async function() {
-            const nickname = document.getElementById('nicknameInput').value.trim();
-            if (!nickname) {
-                alert('请输入昵称！');
-                return;
+        // 康康的吐槽语录
+        const kangkangComplaints = [
+            '这个锅我不背！',
+            '明显是运营的事！',
+            '退群退群！',
+            '找小欧去！',
+            '不关我事！',
+            '这流程有问题！',
+            '我管首推不管退货！',
+            '甩锅大法好！'
+        ];
+
+        // 平底锅类
+        class Pan {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.vx = Math.random() * 8 + 4; // 水平速度
+                this.vy = -(Math.random() * 15 + 10); // 垂直速度（向上）
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 30 + 40;
+                this.type = type;
+                this.sliced = false;
+                this.gravity = 0.5;
+                this.trail = [];
             }
-            
-            currentPlayer = nickname;
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.remove('hidden');
-            
-            await loadLeaderboard();
-            initGame();
-        };
 
-        window.restartGame = function() {
-            document.getElementById('gameOver').style.display = 'none';
-            initGame();
-        };
+            update() {
+                if (!this.sliced) {
+                    this.vy += this.gravity;
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.rotation += this.rotationSpeed;
 
-        window.backToLogin = function() {
-            document.getElementById('gameScreen').classList.add('hidden');
-            document.getElementById('gameOver').style.display = 'none';
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('nicknameInput').value = '';
-        };
+                    // 添加轨迹点
+                    this.trail.push({ x: this.x, y: this.y });
+                    if (this.trail.length > 8) {
+                        this.trail.shift();
+                    }
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+
+                // 绘制轨迹
+                if (this.trail.length > 1) {
+                    ctx.globalAlpha = 0.3;
+                    ctx.strokeStyle = panTypes[this.type].color;
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(this.trail[0].x - this.x, this.trail[0].y - this.y);
+                    for (let i = 1; i < this.trail.length; i++) {
+                        ctx.lineTo(this.trail[i].x - this.x, this.trail[i].y - this.y);
+                    }
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+
+                // 绘制平底锅
+                ctx.fillStyle = panTypes[this.type].color;
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // 绘制锅柄
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(this.size / 2, -5, this.size / 3, 10);
+
+                // 绘制表情符号
+                ctx.font = `${this.size / 3}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'white';
+                ctx.fillText(panTypes[this.type].emoji, 0, this.size / 6);
+
+                ctx.restore();
+            }
+
+            isPointInside(x, y) {
+                const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
+                return distance < this.size / 2;
+            }
+
+            slice() {
+                if (!this.sliced) {
+                    this.sliced = true;
+                    this.createSliceEffect();
+                    return panTypes[this.type].points;
+                }
+                return 0;
+            }
+
+            createSliceEffect() {
+                // 创建切割粒子效果
+                for (let i = 0; i < 15; i++) {
+                    particles.push(new Particle(
+                        this.x + (Math.random() - 0.5) * this.size,
+                        this.y + (Math.random() - 0.5) * this.size,
+                        panTypes[this.type].color
+                    ));
+                }
+            }
+        }
+
+        // 粒子类
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = (Math.random() - 0.5) * 10;
+                this.color = color;
+                this.life = 1;
+                this.decay = Math.random() * 0.02 + 0.02;
+                this.size = Math.random() * 8 + 4;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.2; // 重力
+                this.life -= this.decay;
+                this.size *= 0.98;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            isDead() {
+                return this.life <= 0 || this.size <= 0.5;
+            }
+        }
 
         // 初始化游戏
         function initGame() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
             score = 0;
+            combo = 0;
             timeLeft = 60;
-            level = 1;
-            spawnRate = 2000;
+            spawnRate = 1500;
             gameRunning = true;
+            pans = [];
+            particles = [];
+            mouseTrail = [];
 
             updateUI();
-            clearGameArea();
+            setupEventListeners();
             startGameLoop();
+        }
+
+        // 设置事件监听
+        function setupEventListeners() {
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mousedown', handleMouseDown);
+            
+            // 触摸事件支持
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        }
+
+        function handleMouseMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            lastMousePos = { x: mouseX, y: mouseY };
+            
+            // 添加到鼠标轨迹
+            mouseTrail.push({ x: mouseX, y: mouseY, time: Date.now() });
+            if (mouseTrail.length > 10) {
+                mouseTrail.shift();
+            }
+            
+            checkSlice(mouseX, mouseY);
+        }
+
+        function handleMouseDown(e) {
+            e.preventDefault();
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            
+            lastMousePos = { x: touchX, y: touchY };
+            checkSlice(touchX, touchY);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            
+            lastMousePos = { x: touchX, y: touchY };
+            
+            mouseTrail.push({ x: touchX, y: touchY, time: Date.now() });
+            if (mouseTrail.length > 10) {
+                mouseTrail.shift();
+            }
+            
+            checkSlice(touchX, touchY);
+        }
+
+        // 检查切割
+        function checkSlice(x, y) {
+            if (!gameRunning) return;
+            
+            for (let i = pans.length - 1; i >= 0; i--) {
+                const pan = pans[i];
+                if (!pan.sliced && pan.isPointInside(x, y)) {
+                    const points = pan.slice();
+                    if (points > 0) {
+                        score += points;
+                        combo++;
+                        
+                        // 显示连击效果
+                        if (combo > 1) {
+                            showComboEffect(x, y, combo);
+                        }
+                        
+                        // 显示得分效果
+                        showScoreEffect(x, y, points);
+                        
+                        updateUI();
+                        
+                        // 移除被切的锅
+                        setTimeout(() => {
+                            const index = pans.indexOf(pan);
+                            if (index > -1) {
+                                pans.splice(index, 1);
+                            }
+                        }, 500);
+                    }
+                    break;
+                }
+            }
+        }
+
+        // 显示连击效果
+        function showComboEffect(x, y, comboCount) {
+            const comboElement = document.createElement('div');
+            comboElement.className = 'combo-text';
+            comboElement.textContent = `${comboCount}x COMBO!`;
+            comboElement.style.left = x + 'px';
+            comboElement.style.top = y + 'px';
+            
+            document.getElementById('gameScreen').appendChild(comboElement);
+            
+            setTimeout(() => {
+                if (comboElement.parentNode) {
+                    comboElement.parentNode.removeChild(comboElement);
+                }
+            }, 1000);
+        }
+
+        // 显示得分效果
+        function showScoreEffect(x, y, points) {
+            ctx.save();
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.textAlign = 'center';
+            ctx.strokeText(`+${points}`, x, y);
+            ctx.fillText(`+${points}`, x, y);
+            ctx.restore();
+        }
+
+        // 生成平底锅
+        function spawnPan() {
+            if (!gameRunning) return;
+            
+            const types = Object.keys(panTypes);
+            const randomType = types[Math.floor(Math.random() * types.length)];
+            
+            // 从左下角康康的位置发射
+            const startX = 120;
+            const startY = canvas.height - 100;
+            
+            const pan = new Pan(startX, startY, randomType);
+            pans.push(pan);
+            
+            // 康康说话
+            showKangkangSpeech();
+        }
+
+        // 康康说话
+        function showKangkangSpeech() {
+            const bubble = document.getElementById('speechBubble');
+            const randomComplaint = kangkangComplaints[Math.floor(Math.random() * kangkangComplaints.length)];
+            
+            bubble.textContent = randomComplaint;
+            bubble.classList.remove('hidden');
+            
+            setTimeout(() => {
+                bubble.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 游戏循环
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制鼠标轨迹（刀光）
+            drawMouseTrail();
+            
+            // 更新和绘制平底锅
+            for (let i = pans.length - 1; i >= 0; i--) {
+                const pan = pans[i];
+                pan.update();
+                pan.draw();
+                
+                // 移除超出屏幕的锅
+                if (pan.y > canvas.height + 100 || pan.x > canvas.width + 100) {
+                    pans.splice(i, 1);
+                    // 如果锅掉了，重置连击
+                    if (!pan.sliced) {
+                        combo = 0;
+                        updateUI();
+                    }
+                }
+            }
+            
+            // 更新和绘制粒子
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                particle.update();
+                particle.draw();
+                
+                if (particle.isDead()) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 绘制鼠标轨迹
+        function drawMouseTrail() {
+            if (mouseTrail.length < 2) return;
+            
+            const now = Date.now();
+            
+            // 清理过期的轨迹点
+            for (let i = mouseTrail.length - 1; i >= 0; i--) {
+                if (now - mouseTrail[i].time > 200) {
+                    mouseTrail.splice(i, 1);
+                }
+            }
+            
+            if (mouseTrail.length < 2) return;
+            
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            for (let i = 1; i < mouseTrail.length; i++) {
+                const alpha = i / mouseTrail.length;
+                const width = 8 * alpha;
+                
+                ctx.globalAlpha = alpha;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = width;
+                
+                ctx.beginPath();
+                ctx.moveTo(mouseTrail[i - 1].x, mouseTrail[i - 1].y);
+                ctx.lineTo(mouseTrail[i].x, mouseTrail[i].y);
+                ctx.stroke();
+            }
+            
+            ctx.restore();
         }
 
         // 开始游戏循环
@@ -498,133 +924,29 @@
                 
                 if (timeLeft <= 0) {
                     endGame();
+                    return;
                 }
                 
-                // 升级逻辑
-                const newLevel = Math.floor(score / 500) + 1;
-                if (newLevel > level) {
-                    level = newLevel;
-                    spawnRate = Math.max(500, spawnRate - 200);
-                    restartSpawnTimer();
+                // 难度递增
+                if (timeLeft % 10 === 0 && spawnRate > 300) {
+                    spawnRate -= 100;
+                    clearInterval(spawnTimer);
+                    spawnTimer = setInterval(spawnPan, spawnRate);
                 }
             }, 1000);
 
-            // 生成对象
-            startSpawnTimer();
-        }
-
-        function startSpawnTimer() {
-            spawnTimer = setInterval(spawnObject, spawnRate);
-        }
-
-        function restartSpawnTimer() {
-            clearInterval(spawnTimer);
-            startSpawnTimer();
-        }
-
-        // 生成游戏对象
-        function spawnObject() {
-            if (!gameRunning) return;
-
-            const gameArea = document.getElementById('gameArea');
-            const objectTypes = Object.keys(gameObjects);
-            const randomType = objectTypes[Math.floor(Math.random() * objectTypes.length)];
-            const objectData = gameObjects[randomType];
-
-            const popup = document.createElement('div');
-            popup.className = `popup-item ${randomType}`;
-            popup.textContent = objectData.name;
+            // 生成平底锅
+            spawnTimer = setInterval(spawnPan, spawnRate);
             
-            // 随机位置
-            const maxX = gameArea.clientWidth - 80;
-            const maxY = gameArea.clientHeight - 80;
-            popup.style.left = Math.random() * maxX + 'px';
-            popup.style.top = Math.random() * maxY + 'px';
-
-            // 点击事件
-            popup.addEventListener('click', () => handleClick(popup, randomType));
-
-            gameArea.appendChild(popup);
-
-            // 3秒后自动消失
-            setTimeout(() => {
-                if (popup.parentNode) {
-                    popup.parentNode.removeChild(popup);
-                }
-            }, 3000);
-
-            // 随机显示吐槽气泡
-            if (Math.random() < 0.3) {
-                showComplaintBubble(popup, objectData.complaints);
-            }
-        }
-
-        // 处理点击
-        function handleClick(element, type) {
-            const objectData = gameObjects[type];
-            score += objectData.points;
-            
-            // 显示点击效果
-            showClickEffect(element, objectData.points);
-            
-            // 移除元素
-            if (element.parentNode) {
-                element.parentNode.removeChild(element);
-            }
-            
-            updateUI();
-        }
-
-        // 显示点击效果
-        function showClickEffect(element, points) {
-            const effect = document.createElement('div');
-            effect.className = 'click-effect';
-            effect.textContent = points > 0 ? `+${points}` : points;
-            effect.style.color = points > 0 ? '#4CAF50' : '#F44336';
-            effect.style.left = element.style.left;
-            effect.style.top = element.style.top;
-            
-            document.getElementById('gameArea').appendChild(effect);
-            
-            setTimeout(() => {
-                if (effect.parentNode) {
-                    effect.parentNode.removeChild(effect);
-                }
-            }, 1000);
-        }
-
-        // 显示吐槽气泡
-        function showComplaintBubble(element, complaints) {
-            const bubble = document.createElement('div');
-            bubble.className = 'complaint-bubble';
-            bubble.textContent = complaints[Math.floor(Math.random() * complaints.length)];
-            
-            const rect = element.getBoundingClientRect();
-            bubble.style.left = (rect.left - 100) + 'px';
-            bubble.style.top = (rect.top - 50) + 'px';
-            
-            document.getElementById('gameArea').appendChild(bubble);
-            
-            setTimeout(() => {
-                if (bubble.parentNode) {
-                    bubble.parentNode.removeChild(bubble);
-                }
-            }, 3000);
+            // 开始游戏循环
+            gameLoop();
         }
 
         // 更新UI
         function updateUI() {
             document.getElementById('score').textContent = score;
+            document.getElementById('combo').textContent = combo;
             document.getElementById('time').textContent = timeLeft;
-            document.getElementById('level').textContent = level;
-        }
-
-        // 清空游戏区域
-        function clearGameArea() {
-            const gameArea = document.getElementById('gameArea');
-            while (gameArea.firstChild) {
-                gameArea.removeChild(gameArea.firstChild);
-            }
         }
 
         // 结束游戏
@@ -632,7 +954,6 @@
             gameRunning = false;
             clearInterval(gameTimer);
             clearInterval(spawnTimer);
-            clearGameArea();
             
             await saveScore();
             await loadLeaderboard();
@@ -648,14 +969,13 @@
             
             scoreElement.textContent = `您的得分: ${score}`;
             
-            // 获取排名
             const rank = await getPlayerRank();
             if (rank <= 10) {
-                titleElement.textContent = '🎉 恭喜上榜！';
-                rankElement.textContent = `当前排名: 第${rank}名`;
+                titleElement.textContent = '🎉 成功上榜！';
+                rankElement.textContent = `排名: 第${rank}名`;
             } else {
-                titleElement.textContent = '继续努力！';
-                rankElement.textContent = `当前排名: 第${rank}名`;
+                titleElement.textContent = '继续努力切锅！';
+                rankElement.textContent = `排名: 第${rank}名`;
             }
             
             gameOverElement.style.display = 'flex';
@@ -700,10 +1020,7 @@
                         scores.push(child.val());
                     });
                     
-                    // 按分数排序
                     scores.sort((a, b) => b.score - a.score);
-                    
-                    // 显示前10名
                     displayLeaderboard(scores.slice(0, 10));
                 }
             } catch (error) {
@@ -759,9 +1076,45 @@
             }
         }
 
-        // 页面加载时加载排行榜
-        window.addEventListener('load', () => {
-            // 初始加载排行榜（如果需要在登录前显示）
+        // 全局函数
+        window.startGame = async function() {
+            const nickname = document.getElementById('nicknameInput').value.trim();
+            if (!nickname) {
+                alert('请输入昵称开始切锅！');
+                return;
+            }
+            
+            currentPlayer = nickname;
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            
+            await loadLeaderboard();
+            initGame();
+        };
+
+        window.restartGame = function() {
+            document.getElementById('gameOver').style.display = 'none';
+            initGame();
+        };
+
+        window.backToLogin = function() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('nicknameInput').value = '';
+        };
+
+        // 窗口大小变化时重新调整画布
+        window.addEventListener('resize', () => {
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', async () => {
+            await loadLeaderboard();
         });
     </script>
 </body>

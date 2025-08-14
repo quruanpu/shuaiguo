@@ -8,7 +8,6 @@
     <!-- 引入游戏开发库 -->
     <script src="https://unpkg.com/konva@9/konva.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     
     <style>
@@ -709,6 +708,74 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        // 简化音效系统 - 使用Web Audio API创建音效
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const soundSystem = {
+            playSlice: () => {
+                try {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                } catch (e) {
+                    console.log('音效播放失败，但不影响游戏');
+                }
+            },
+            
+            playCombo: () => {
+                try {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.2);
+                    
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                } catch (e) {
+                    console.log('音效播放失败，但不影响游戏');
+                }
+            },
+            
+            playThrow: () => {
+                try {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                    oscillator.frequency.linearRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (e) {
+                    console.log('音效播放失败，但不影响游戏');
+                }
+            }
+        };
+
         // 游戏引擎初始化
         let gameEngine = {
             stage: null,
@@ -738,26 +805,9 @@
             }
         };
 
-        // 音效系统
-        const soundSystem = {
-            slice: new Howl({
-                src: ['data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEgBjuR2e7CdyMFl2+z4tuOSAkUPZzA6LhYFAlFpN7nsmIdBDGH0fLNeSsFJWu+7uCPXQsNJHzO7ddnFgUVLYzM79CLNwgZKIXL6d2QLg8IQajmvGEcBTOG0PLLfisKIW6z7t6RQQoUOJfQ6rNYEQdFpdP'],
-                volume: 0.3
-            }),
-            combo: new Howl({
-                src: ['data:audio/wav;base64,UklGRmYBAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YUIBAAACAgICAwMDAwQEBAQFBQUFBgYGBgcHBwcICAgICQkJCQoKCgoLCwsLDAwMDA0NDQ0ODg4ODw8PD'],
-                volume: 0.5
-            }),
-            throw: new Howl({
-                src: ['data:audio/wav;base64,UklGRiwCAABXQVZFZm20IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQgCAAC'],
-                volume: 0.2
-            }),
-            bgm: new Howl({
-                src: ['data:audio/mp3;base64,'],
-                volume: 0.1,
-                loop: true
-            })
-        };
+        // 游戏计时器
+        let gameTimer = null;
+        let spawnTimer = null;
 
         // 平底锅类型定义（升级版）
         const panTypes = {
@@ -839,7 +889,7 @@
                 ],
                 emoji: '👔'
             },
-            // 新增特殊锅子
+            // 特殊锅子
             bonus_pot: {
                 name: '奖励金锅',
                 color: '#f1c40f',
@@ -1035,7 +1085,7 @@
                 this.sliced = true;
                 
                 // 播放音效
-                soundSystem.slice.play();
+                soundSystem.playSlice();
                 
                 // 创建切割效果
                 this.createSliceEffect();
@@ -1044,16 +1094,23 @@
                 this.showComplaint();
                 
                 // 隐藏对象
-                gsap.to(this.group, {
-                    duration: 0.5,
-                    scaleX: 0,
-                    scaleY: 0,
-                    rotation: 360,
-                    alpha: 0,
-                    onComplete: () => {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(this.group, {
+                        duration: 0.5,
+                        scaleX: 0,
+                        scaleY: 0,
+                        rotation: 360,
+                        opacity: 0,
+                        onComplete: () => {
+                            this.destroy();
+                        }
+                    });
+                } else {
+                    // 如果GSAP加载失败，使用简单动画
+                    setTimeout(() => {
                         this.destroy();
-                    }
-                });
+                    }, 500);
+                }
 
                 return this.data.points;
             }
@@ -1072,15 +1129,19 @@
                     gameEngine.effectLayer.add(particle);
 
                     // 粒子动画
-                    gsap.to(particle, {
-                        duration: 1,
-                        x: particle.x() + (Math.random() - 0.5) * 200,
-                        y: particle.y() + Math.random() * 200 + 100,
-                        opacity: 0,
-                        scaleX: 0.1,
-                        scaleY: 0.1,
-                        onComplete: () => particle.destroy()
-                    });
+                    if (typeof gsap !== 'undefined') {
+                        gsap.to(particle, {
+                            duration: 1,
+                            x: particle.x() + (Math.random() - 0.5) * 200,
+                            y: particle.y() + Math.random() * 200 + 100,
+                            opacity: 0,
+                            scaleX: 0.1,
+                            scaleY: 0.1,
+                            onComplete: () => particle.destroy()
+                        });
+                    } else {
+                        setTimeout(() => particle.destroy(), 1000);
+                    }
                 }
 
                 // 切割闪光效果
@@ -1096,13 +1157,17 @@
 
                 gameEngine.effectLayer.add(flash);
 
-                gsap.to(flash, {
-                    duration: 0.3,
-                    scaleX: 3,
-                    scaleY: 3,
-                    opacity: 0,
-                    onComplete: () => flash.destroy()
-                });
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(flash, {
+                        duration: 0.3,
+                        scaleX: 3,
+                        scaleY: 3,
+                        opacity: 0,
+                        onComplete: () => flash.destroy()
+                    });
+                } else {
+                    setTimeout(() => flash.destroy(), 300);
+                }
             }
 
             showComplaint() {
@@ -1118,32 +1183,41 @@
                 document.getElementById('gameScreen').appendChild(complaintElement);
                 
                 // GSAP动画
-                gsap.fromTo(complaintElement, 
-                    {
-                        scale: 0,
-                        rotation: -15,
-                        y: this.y
-                    },
-                    {
-                        duration: 0.3,
-                        scale: 1,
-                        rotation: 0,
-                        ease: "back.out(1.7)"
-                    }
-                );
+                if (typeof gsap !== 'undefined') {
+                    gsap.fromTo(complaintElement, 
+                        {
+                            scale: 0,
+                            rotation: -15,
+                            y: this.y
+                        },
+                        {
+                            duration: 0.3,
+                            scale: 1,
+                            rotation: 0,
+                            ease: "back.out(1.7)"
+                        }
+                    );
 
-                gsap.to(complaintElement, {
-                    delay: 1.5,
-                    duration: 0.5,
-                    y: this.y - 100,
-                    opacity: 0,
-                    scale: 0.8,
-                    onComplete: () => {
+                    gsap.to(complaintElement, {
+                        delay: 1.5,
+                        duration: 0.5,
+                        y: this.y - 100,
+                        opacity: 0,
+                        scale: 0.8,
+                        onComplete: () => {
+                            if (complaintElement.parentNode) {
+                                complaintElement.parentNode.removeChild(complaintElement);
+                            }
+                        }
+                    });
+                } else {
+                    // 简单动画后备方案
+                    setTimeout(() => {
                         if (complaintElement.parentNode) {
                             complaintElement.parentNode.removeChild(complaintElement);
                         }
-                    }
-                });
+                    }, 2000);
+                }
             }
 
             destroy() {
@@ -1163,16 +1237,18 @@
                 cooldown: 20,
                 duration: 5,
                 activate: () => {
-                    gsap.globalTimeline.timeScale(0.3);
-                    document.getElementById('slowTimeSkill').classList.add('cooldown');
-                    
-                    setTimeout(() => {
-                        gsap.globalTimeline.timeScale(1);
-                    }, 5000);
-                    
-                    setTimeout(() => {
-                        document.getElementById('slowTimeSkill').classList.remove('cooldown');
-                    }, 20000);
+                    if (typeof gsap !== 'undefined') {
+                        gsap.globalTimeline.timeScale(0.3);
+                        document.getElementById('slowTimeSkill').classList.add('cooldown');
+                        
+                        setTimeout(() => {
+                            gsap.globalTimeline.timeScale(1);
+                        }, 5000);
+                        
+                        setTimeout(() => {
+                            document.getElementById('slowTimeSkill').classList.remove('cooldown');
+                        }, 20000);
+                    }
                 }
             },
             multiSlice: {
@@ -1213,28 +1289,30 @@
 
         // 初始化粒子背景
         function initParticles() {
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 120 },
-                    color: { value: ["#667eea", "#764ba2", "#ff6b6b"] },
-                    shape: { type: "circle" },
-                    size: { value: 3, random: true },
-                    move: {
-                        enable: true,
-                        speed: 2,
-                        direction: "none",
-                        random: true,
-                        out_mode: "out"
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 120 },
+                        color: { value: ["#667eea", "#764ba2", "#ff6b6b"] },
+                        shape: { type: "circle" },
+                        size: { value: 3, random: true },
+                        move: {
+                            enable: true,
+                            speed: 2,
+                            direction: "none",
+                            random: true,
+                            out_mode: "out"
+                        },
+                        opacity: { value: 0.6, random: true }
                     },
-                    opacity: { value: 0.6, random: true }
-                },
-                interactivity: {
-                    events: {
-                        onhover: { enable: true, mode: "repulse" },
-                        onclick: { enable: true, mode: "push" }
+                    interactivity: {
+                        events: {
+                            onhover: { enable: true, mode: "repulse" },
+                            onclick: { enable: true, mode: "push" }
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         // 初始化游戏引擎
@@ -1346,7 +1424,7 @@
                     // 连击效果
                     if (gameState.combo > 1) {
                         showComboEffect(x, y, gameState.combo);
-                        soundSystem.combo.play();
+                        soundSystem.playCombo();
                     }
                     
                     // 显示得分
@@ -1375,32 +1453,40 @@
             
             document.getElementById('gameScreen').appendChild(comboElement);
             
-            gsap.fromTo(comboElement, 
-                {
-                    scale: 0,
-                    rotation: 180,
-                    y: y
-                },
-                {
-                    duration: 0.5,
-                    scale: 1.5,
-                    rotation: 0,
-                    y: y - 50,
-                    ease: "back.out(2)"
-                }
-            );
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo(comboElement, 
+                    {
+                        scale: 0,
+                        rotation: 180,
+                        y: y
+                    },
+                    {
+                        duration: 0.5,
+                        scale: 1.5,
+                        rotation: 0,
+                        y: y - 50,
+                        ease: "back.out(2)"
+                    }
+                );
 
-            gsap.to(comboElement, {
-                delay: 1,
-                duration: 0.5,
-                scale: 0,
-                opacity: 0,
-                onComplete: () => {
+                gsap.to(comboElement, {
+                    delay: 1,
+                    duration: 0.5,
+                    scale: 0,
+                    opacity: 0,
+                    onComplete: () => {
+                        if (comboElement.parentNode) {
+                            comboElement.parentNode.removeChild(comboElement);
+                        }
+                    }
+                });
+            } else {
+                setTimeout(() => {
                     if (comboElement.parentNode) {
                         comboElement.parentNode.removeChild(comboElement);
                     }
-                }
-            });
+                }, 1500);
+            }
         }
 
         // 显示得分效果
@@ -1421,14 +1507,18 @@
 
             gameEngine.effectLayer.add(scoreText);
 
-            gsap.to(scoreText, {
-                duration: 1,
-                y: y - 80,
-                scaleX: 1.5,
-                scaleY: 1.5,
-                opacity: 0,
-                onComplete: () => scoreText.destroy()
-            });
+            if (typeof gsap !== 'undefined') {
+                gsap.to(scoreText, {
+                    duration: 1,
+                    y: y - 80,
+                    scaleX: 1.5,
+                    scaleY: 1.5,
+                    opacity: 0,
+                    onComplete: () => scoreText.destroy()
+                });
+            } else {
+                setTimeout(() => scoreText.destroy(), 1000);
+            }
         }
 
         // 生成平底锅
@@ -1453,7 +1543,7 @@
             gameState.pans.push(pan);
             
             // 播放投掷音效
-            soundSystem.throw.play();
+            soundSystem.playThrow();
             
             // 康康说话
             showKangkangSpeech();
@@ -1467,29 +1557,35 @@
             bubble.textContent = randomComplaint;
             bubble.classList.remove('hidden');
             
-            gsap.fromTo(bubble, 
-                {
-                    scale: 0,
-                    rotation: -15
-                },
-                {
-                    duration: 0.4,
-                    scale: 1,
-                    rotation: 0,
-                    ease: "back.out(1.7)"
-                }
-            );
-            
-            setTimeout(() => {
-                gsap.to(bubble, {
-                    duration: 0.3,
-                    scale: 0,
-                    rotation: 15,
-                    onComplete: () => {
-                        bubble.classList.add('hidden');
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo(bubble, 
+                    {
+                        scale: 0,
+                        rotation: -15
+                    },
+                    {
+                        duration: 0.4,
+                        scale: 1,
+                        rotation: 0,
+                        ease: "back.out(1.7)"
                     }
-                });
-            }, 4000);
+                );
+                
+                setTimeout(() => {
+                    gsap.to(bubble, {
+                        duration: 0.3,
+                        scale: 0,
+                        rotation: 15,
+                        onComplete: () => {
+                            bubble.classList.add('hidden');
+                        }
+                    });
+                }, 4000);
+            } else {
+                setTimeout(() => {
+                    bubble.classList.add('hidden');
+                }, 4000);
+            }
         }
 
         // 游戏循环
@@ -1530,7 +1626,7 @@
             gameEngine.running = true;
             
             // 计时器
-            const gameTimer = setInterval(() => {
+            gameTimer = setInterval(() => {
                 gameState.timeLeft--;
                 updateUI();
                 
@@ -1550,21 +1646,15 @@
             }, 1000);
 
             // 生成平底锅定时器
-            const spawnTimer = setInterval(spawnPan, gameState.spawnRate);
+            spawnTimer = setInterval(spawnPan, gameState.spawnRate);
             
             // 开始游戏循环
             gameLoop();
-            
-            // 播放背景音乐
-            // soundSystem.bgm.play();
         }
 
         // 结束游戏
         async function endGame() {
             gameEngine.running = false;
-            
-            // 停止背景音乐
-            soundSystem.bgm.stop();
             
             await saveScore();
             await loadLeaderboard();
@@ -1591,18 +1681,20 @@
             
             gameOverElement.style.display = 'flex';
             
-            gsap.fromTo(gameOverElement.querySelector('.game-over-box'), 
-                {
-                    scale: 0,
-                    rotation: 180
-                },
-                {
-                    duration: 0.8,
-                    scale: 1,
-                    rotation: 0,
-                    ease: "back.out(1.7)"
-                }
-            );
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo(gameOverElement.querySelector('.game-over-box'), 
+                    {
+                        scale: 0,
+                        rotation: 180
+                    },
+                    {
+                        duration: 0.8,
+                        scale: 1,
+                        rotation: 0,
+                        ease: "back.out(1.7)"
+                    }
+                );
+            }
         }
 
         // 保存分数
@@ -1674,19 +1766,21 @@
                 content.appendChild(item);
                 
                 // 动画效果
-                gsap.fromTo(item, 
-                    {
-                        x: -50,
-                        opacity: 0
-                    },
-                    {
-                        delay: index * 0.1,
-                        duration: 0.5,
-                        x: 0,
-                        opacity: 1,
-                        ease: "back.out(1.7)"
-                    }
-                );
+                if (typeof gsap !== 'undefined') {
+                    gsap.fromTo(item, 
+                        {
+                            x: -50,
+                            opacity: 0
+                        },
+                        {
+                            delay: index * 0.1,
+                            duration: 0.5,
+                            x: 0,
+                            opacity: 1,
+                            ease: "back.out(1.7)"
+                        }
+                    );
+                }
             });
         }
 
@@ -1717,8 +1811,13 @@
             }
         }
 
-        // 全局函数
+        // 确保全局函数可访问
         window.startGame = async function() {
+            // 启用音频上下文（某些浏览器需要用户交互）
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            
             const nickname = document.getElementById('nicknameInput').value.trim();
             if (!nickname) {
                 alert('请输入昵称开始切锅！');
@@ -1728,28 +1827,33 @@
             gameState.player = nickname;
             
             // 界面切换动画
-            gsap.to(document.getElementById('loginScreen'), {
-                duration: 0.8,
-                opacity: 0,
-                scale: 0.8,
-                onComplete: () => {
-                    document.getElementById('loginScreen').classList.add('hidden');
-                    document.getElementById('gameScreen').classList.remove('hidden');
-                    
-                    gsap.fromTo(document.getElementById('gameScreen'), 
-                        {
-                            opacity: 0,
-                            scale: 1.2
-                        },
-                        {
-                            duration: 0.8,
-                            opacity: 1,
-                            scale: 1,
-                            ease: "back.out(1.7)"
-                        }
-                    );
-                }
-            });
+            if (typeof gsap !== 'undefined') {
+                gsap.to(document.getElementById('loginScreen'), {
+                    duration: 0.8,
+                    opacity: 0,
+                    scale: 0.8,
+                    onComplete: () => {
+                        document.getElementById('loginScreen').classList.add('hidden');
+                        document.getElementById('gameScreen').classList.remove('hidden');
+                        
+                        gsap.fromTo(document.getElementById('gameScreen'), 
+                            {
+                                opacity: 0,
+                                scale: 1.2
+                            },
+                            {
+                                duration: 0.8,
+                                opacity: 1,
+                                scale: 1,
+                                ease: "back.out(1.7)"
+                            }
+                        );
+                    }
+                });
+            } else {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('gameScreen').classList.remove('hidden');
+            }
             
             await loadLeaderboard();
             initGameEngine();
@@ -1768,36 +1872,56 @@
 
         window.restartGame = function() {
             // 清理当前游戏状态
+            if (gameTimer) clearInterval(gameTimer);
+            if (spawnTimer) clearInterval(spawnTimer);
+            
             gameState.pans.forEach(pan => pan.destroy());
             gameState.pans = [];
             
-            gameEngine.layer.destroyChildren();
-            gameEngine.particleLayer.destroyChildren();
-            gameEngine.effectLayer.destroyChildren();
+            if (gameEngine.layer) gameEngine.layer.destroyChildren();
+            if (gameEngine.particleLayer) gameEngine.particleLayer.destroyChildren();
+            if (gameEngine.effectLayer) gameEngine.effectLayer.destroyChildren();
             
-            gsap.to(document.getElementById('gameOver'), {
-                duration: 0.5,
-                opacity: 0,
-                scale: 0.8,
-                onComplete: () => {
-                    document.getElementById('gameOver').style.display = 'none';
-                    
-                    // 重置游戏状态
-                    gameState.score = 0;
-                    gameState.combo = 0;
-                    gameState.maxCombo = 0;
-                    gameState.timeLeft = 60;
-                    gameState.spawnRate = 1000;
-                    
-                    updateUI();
-                    startGameLoop();
-                }
-            });
+            if (typeof gsap !== 'undefined') {
+                gsap.to(document.getElementById('gameOver'), {
+                    duration: 0.5,
+                    opacity: 0,
+                    scale: 0.8,
+                    onComplete: () => {
+                        document.getElementById('gameOver').style.display = 'none';
+                        
+                        // 重置游戏状态
+                        gameState.score = 0;
+                        gameState.combo = 0;
+                        gameState.maxCombo = 0;
+                        gameState.timeLeft = 60;
+                        gameState.spawnRate = 1000;
+                        
+                        updateUI();
+                        startGameLoop();
+                    }
+                });
+            } else {
+                document.getElementById('gameOver').style.display = 'none';
+                
+                // 重置游戏状态
+                gameState.score = 0;
+                gameState.combo = 0;
+                gameState.maxCombo = 0;
+                gameState.timeLeft = 60;
+                gameState.spawnRate = 1000;
+                
+                updateUI();
+                startGameLoop();
+            }
         };
 
         window.backToLogin = function() {
             // 清理游戏状态
             gameEngine.running = false;
+            if (gameTimer) clearInterval(gameTimer);
+            if (spawnTimer) clearInterval(spawnTimer);
+            
             gameState.pans.forEach(pan => pan.destroy());
             gameState.pans = [];
             
@@ -1805,30 +1929,37 @@
                 gameEngine.stage.destroy();
             }
             
-            gsap.to(document.getElementById('gameScreen'), {
-                duration: 0.5,
-                opacity: 0,
-                scale: 0.8,
-                onComplete: () => {
-                    document.getElementById('gameScreen').classList.add('hidden');
-                    document.getElementById('gameOver').style.display = 'none';
-                    document.getElementById('loginScreen').classList.remove('hidden');
-                    document.getElementById('nicknameInput').value = '';
-                    
-                    gsap.fromTo(document.getElementById('loginScreen'), 
-                        {
-                            opacity: 0,
-                            scale: 1.2
-                        },
-                        {
-                            duration: 0.8,
-                            opacity: 1,
-                            scale: 1,
-                            ease: "back.out(1.7)"
-                        }
-                    );
-                }
-            });
+            if (typeof gsap !== 'undefined') {
+                gsap.to(document.getElementById('gameScreen'), {
+                    duration: 0.5,
+                    opacity: 0,
+                    scale: 0.8,
+                    onComplete: () => {
+                        document.getElementById('gameScreen').classList.add('hidden');
+                        document.getElementById('gameOver').style.display = 'none';
+                        document.getElementById('loginScreen').classList.remove('hidden');
+                        document.getElementById('nicknameInput').value = '';
+                        
+                        gsap.fromTo(document.getElementById('loginScreen'), 
+                            {
+                                opacity: 0,
+                                scale: 1.2
+                            },
+                            {
+                                duration: 0.8,
+                                opacity: 1,
+                                scale: 1,
+                                ease: "back.out(1.7)"
+                            }
+                        );
+                    }
+                });
+            } else {
+                document.getElementById('gameScreen').classList.add('hidden');
+                document.getElementById('gameOver').style.display = 'none';
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('nicknameInput').value = '';
+            }
         };
 
         // 窗口大小变化时重新调整

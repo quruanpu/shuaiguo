@@ -114,98 +114,178 @@
         /* 康康角色 */
         .kangkang-character {
             position: absolute;
-            bottom: 50px;
-            left: 50px;
-            width: 120px;
-            height: 150px;
+            bottom: 30px;
+            left: 30px;
+            width: 160px;
+            height: 200px;
             z-index: 10;
         }
 
+        .character-name {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+            font-size: 16px;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
         .kangkang-body {
-            width: 80px;
-            height: 100px;
+            width: 100px;
+            height: 120px;
             background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: relative;
-            animation: kangkangBounce 2s ease-in-out infinite;
-            margin: 0 auto;
+            animation: kangkangBounce 1.5s ease-in-out infinite;
+            margin: 20px auto 0;
+            border: 3px solid #333;
         }
 
         .kangkang-head {
-            width: 60px;
-            height: 60px;
-            background: #fdbcb4;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, #fdbcb4, #f7a399);
             border-radius: 50%;
             position: absolute;
-            top: -30px;
+            top: -40px;
             left: 10px;
             border: 3px solid #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .kangkang-face {
             position: absolute;
-            top: 15px;
+            top: 20px;
+            left: 20px;
+            font-size: 32px;
+            animation: faceChange 3s ease-in-out infinite;
+        }
+
+        .kangkang-hair {
+            position: absolute;
+            top: -10px;
             left: 15px;
-            font-size: 24px;
+            width: 50px;
+            height: 30px;
+            background: #2c3e50;
+            border-radius: 50% 50% 0 0;
         }
 
         .kangkang-arm {
-            width: 40px;
-            height: 15px;
-            background: #fdbcb4;
-            border-radius: 10px;
+            width: 50px;
+            height: 20px;
+            background: linear-gradient(45deg, #fdbcb4, #f7a399);
+            border-radius: 15px;
             position: absolute;
-            top: 20px;
-            right: -35px;
+            top: 25px;
+            right: -45px;
             transform-origin: left center;
-            animation: armThrow 1s ease-in-out infinite;
+            animation: armThrow 0.8s ease-in-out infinite;
+            border: 2px solid #333;
+        }
+
+        .kangkang-hand {
+            position: absolute;
+            right: -15px;
+            top: -5px;
+            width: 30px;
+            height: 30px;
+            background: #fdbcb4;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .kangkang-legs {
+            position: absolute;
+            bottom: -25px;
+            left: 20px;
+            width: 60px;
+            height: 40px;
+        }
+
+        .kangkang-leg {
+            width: 25px;
+            height: 35px;
+            background: #2c3e50;
+            border-radius: 15px;
+            position: absolute;
+            border: 2px solid #333;
+        }
+
+        .kangkang-leg.left {
+            left: 0;
+            animation: legMove 1.5s ease-in-out infinite;
+        }
+
+        .kangkang-leg.right {
+            right: 0;
+            animation: legMove 1.5s ease-in-out infinite 0.75s;
         }
 
         @keyframes kangkangBounce {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
+            50% { transform: translateY(-15px) scale(1.05); }
         }
 
         @keyframes armThrow {
             0% { transform: rotate(0deg); }
-            50% { transform: rotate(-45deg); }
+            30% { transform: rotate(-60deg); }
+            70% { transform: rotate(-80deg); }
             100% { transform: rotate(0deg); }
+        }
+
+        @keyframes faceChange {
+            0%, 40% { content: '😤'; }
+            50%, 70% { content: '😠'; }
+            80%, 100% { content: '🤬'; }
+        }
+
+        @keyframes legMove {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
         }
 
         /* 对话泡泡 */
         .speech-bubble {
             position: absolute;
-            bottom: 180px;
-            left: 20px;
+            bottom: 220px;
+            left: 10px;
             background: white;
             padding: 15px 20px;
             border-radius: 20px;
             border: 3px solid #333;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: #333;
-            max-width: 200px;
-            animation: bubbleShow 3s ease-in-out;
+            max-width: 220px;
+            animation: bubbleShow 4s ease-in-out;
             z-index: 15;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
 
         .speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -15px;
-            left: 30px;
+            bottom: -18px;
+            left: 40px;
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid white;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 18px solid white;
         }
 
         @keyframes bubbleShow {
-            0% { opacity: 0; transform: scale(0); }
-            20% { opacity: 1; transform: scale(1); }
-            80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0); }
+            0% { opacity: 0; transform: scale(0) rotate(-10deg); }
+            15% { opacity: 1; transform: scale(1) rotate(0deg); }
+            85% { opacity: 1; transform: scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0) rotate(10deg); }
         }
 
         /* UI界面 */
@@ -380,6 +460,41 @@
                 transform: scale(1) translateY(-50px);
             }
         }
+
+        /* 切锅吐槽泡泡 */
+        .slice-complaint {
+            position: absolute;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+            animation: sliceComplaintAnimation 2s ease-out forwards;
+            z-index: 30;
+            pointer-events: none;
+            border: 2px solid #fff;
+        }
+
+        @keyframes sliceComplaintAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(0);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1) translateY(-20px);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1) translateY(-40px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.8) translateY(-80px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -402,11 +517,19 @@
             
             <!-- 康康角色 -->
             <div class="kangkang-character" id="kangkangCharacter">
+                <div class="character-name">首推康康</div>
                 <div class="kangkang-body">
                     <div class="kangkang-head">
+                        <div class="kangkang-hair"></div>
                         <div class="kangkang-face">😤</div>
                     </div>
-                    <div class="kangkang-arm"></div>
+                    <div class="kangkang-arm">
+                        <div class="kangkang-hand"></div>
+                    </div>
+                </div>
+                <div class="kangkang-legs">
+                    <div class="kangkang-leg left"></div>
+                    <div class="kangkang-leg right"></div>
                 </div>
             </div>
 
@@ -474,58 +597,88 @@
         let pans = []; // 平底锅数组
         let particles = []; // 粒子效果数组
         let mouseTrail = []; // 鼠标轨迹
-        let spawnRate = 1500;
+        let spawnRate = 1200;
         let lastMousePos = { x: 0, y: 0 };
 
-        // 平底锅类型和吐槽内容
+        // 平底锅类型和超丰富吐槽内容
         const panTypes = {
             oa_process: {
                 name: 'OA流程锅',
                 color: '#ff6b6b',
                 points: 100,
-                complaints: ['这个OA流程太复杂了！', '谁设计的破流程！', '我不管，小欧你来！'],
+                complaints: [
+                    '这个OA流程太复杂了！', '谁设计的破流程！', '我不管，小欧你来！', '流程走不通啊！',
+                    '系统又卡了！', '这个审批要等到什么时候！', '流程设计有问题！', '我不会操作这个！',
+                    '为什么要这么多步骤！', '流程太繁琐了！', '这个责任不在我！', '系统BUG不关我事！',
+                    '运营部门的事！', '这个锅我不背！', '找IT部门去！', '谁规定的这个流程！'
+                ],
                 emoji: '📋'
             },
             customer_service: {
                 name: '客服甩锅',
                 color: '#4834d4',
                 points: 150,
-                complaints: ['客户的事运营管！', '不是我负责的！', '找康康去！'],
+                complaints: [
+                    '客户的事运营管！', '不是我负责的！', '找康康去！', '这个我不处理！',
+                    '客户太难伺候了！', '这个问题很复杂！', '不在我的职责范围！', '我只是传达消息！',
+                    '客户自己的问题！', '这个要问上级！', '我没权限处理！', '客户理解错了！',
+                    '这个需要技术支持！', '不是服务问题！', '客户要求太奇怪！', '我解释不清楚！',
+                    '让客户找相关部门！', '这个我管不了！', '客户没有说清楚！', '不是我的错！'
+                ],
                 emoji: '📞'
             },
             quality_issue: {
                 name: '质量问题锅',
                 color: '#ff9f43',
                 points: 200,
-                complaints: ['药品压损不关我事！', '这是物流问题！', '退群算了！'],
+                complaints: [
+                    '药品压损不关我事！', '这是物流问题！', '退群算了！', '质量部门负责！',
+                    '不是我们的货！', '供应商的问题！', '运输途中的事！', '包装不是我负责的！',
+                    '这个批次有问题！', '仓库管理的事！', '不是质量问题！', '客户保存不当！',
+                    '环境温度导致的！', '这个我检查过了！', '不是我们能控制的！', '供应链的锅！',
+                    '原材料就有问题！', '生产工艺问题！', '不在质保范围！', '这个要找厂家！',
+                    '检验标准不同！', '客户使用方法错误！', '保质期内正常！', '运输颠簸导致的！'
+                ],
                 emoji: '💊'
             },
             meeting_pot: {
                 name: '开会甩锅',
                 color: '#00d2d3',
                 points: 120,
-                complaints: ['开什么会啊！', '浪费时间！', '我先退了！'],
+                complaints: [
+                    '开什么会啊！', '浪费时间！', '我先退了！', '会议太多了！',
+                    '没有意义的会！', '我有其他事！', '会议效率低！', '又要开会！',
+                    '议题不清楚！', '我不需要参加！', '时间安排不合理！', '会议室太吵！',
+                    '讨论没结果！', '会议时间太长！', '我没有发言权！', '决策不关我事！',
+                    '会议通知太晚！', '议程安排有问题！', '我只是列席的！', '这个会没必要！',
+                    '我有紧急事务！', '会议冲突了！', '讨论偏离主题！', '结论不明确！'
+                ],
                 emoji: '👥'
             },
             boss_pot: {
                 name: '老板锅',
                 color: '#feca57',
                 points: 300,
-                complaints: ['老板的锅我不背！', '这是管理问题！', '我只是执行的！'],
+                complaints: [
+                    '老板的锅我不背！', '这是管理问题！', '我只是执行的！', '决策不是我定的！',
+                    '老板没说清楚！', '指示模糊不清！', '我按要求做的！', '这个要问老板！',
+                    '管理层的决定！', '我没有决策权！', '老板要求的！', '不是我的责任！',
+                    '上级指示有问题！', '老板改主意了！', '政策朝令夕改！', '我只是听命行事！',
+                    '老板没有考虑周全！', '决策依据不足！', '老板太着急了！', '这个风险很大！',
+                    '老板不了解情况！', '执行层面有困难！', '资源不够支持！', '时间安排不现实！',
+                    '老板期望太高！', '目标不切实际！', '我早就提醒过！', '老板不听建议！'
+                ],
                 emoji: '👔'
             }
         };
 
-        // 康康的吐槽语录
+        // 康康的随机吐槽语录
         const kangkangComplaints = [
-            '这个锅我不背！',
-            '明显是运营的事！',
-            '退群退群！',
-            '找小欧去！',
-            '不关我事！',
-            '这流程有问题！',
-            '我管首推不管退货！',
-            '甩锅大法好！'
+            '这个锅我不背！', '明显是运营的事！', '退群退群！', '找小欧去！', '不关我事！',
+            '这流程有问题！', '我管首推不管退货！', '甩锅大法好！', '又要甩锅了！', '看我神技！',
+            '锅来了锅来了！', '甩锅小能手上线！', '这个责任不是我的！', '系统问题找IT！',
+            '客户问题找客服！', '质量问题找质检！', '流程问题找运营！', '管理问题找老板！',
+            '我只是负责首推！', '退货不是我管的！', 'OA流程太复杂！', '谁设计的破系统！'
         ];
 
         // 平底锅类
@@ -533,15 +686,36 @@
             constructor(x, y, type) {
                 this.x = x;
                 this.y = y;
-                this.vx = Math.random() * 8 + 4; // 水平速度
-                this.vy = -(Math.random() * 15 + 10); // 垂直速度（向上）
+                
+                // 更多样化的飞行路径
+                const throwStyle = Math.floor(Math.random() * 4);
+                switch(throwStyle) {
+                    case 0: // 高抛物线
+                        this.vx = Math.random() * 12 + 8;
+                        this.vy = -(Math.random() * 20 + 15);
+                        break;
+                    case 1: // 低平抛
+                        this.vx = Math.random() * 15 + 12;
+                        this.vy = -(Math.random() * 10 + 5);
+                        break;
+                    case 2: // 中等弧度
+                        this.vx = Math.random() * 10 + 10;
+                        this.vy = -(Math.random() * 15 + 10);
+                        break;
+                    case 3: // 超远距离
+                        this.vx = Math.random() * 18 + 15;
+                        this.vy = -(Math.random() * 25 + 20);
+                        break;
+                }
+                
                 this.rotation = Math.random() * Math.PI * 2;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.3;
-                this.size = Math.random() * 30 + 40;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.4;
+                this.size = Math.random() * 40 + 60; // 增大锅子尺寸
                 this.type = type;
                 this.sliced = false;
-                this.gravity = 0.5;
+                this.gravity = 0.4;
                 this.trail = [];
+                this.maxTrailLength = 12;
             }
 
             update() {
@@ -553,7 +727,7 @@
 
                     // 添加轨迹点
                     this.trail.push({ x: this.x, y: this.y });
-                    if (this.trail.length > 8) {
+                    if (this.trail.length > this.maxTrailLength) {
                         this.trail.shift();
                     }
                 }
@@ -564,40 +738,79 @@
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.rotation);
 
-                // 绘制轨迹
+                // 绘制增强的轨迹效果
                 if (this.trail.length > 1) {
-                    ctx.globalAlpha = 0.3;
-                    ctx.strokeStyle = panTypes[this.type].color;
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.moveTo(this.trail[0].x - this.x, this.trail[0].y - this.y);
                     for (let i = 1; i < this.trail.length; i++) {
-                        ctx.lineTo(this.trail[i].x - this.x, this.trail[i].y - this.y);
+                        const alpha = i / this.trail.length * 0.5;
+                        const size = (i / this.trail.length) * 4;
+                        
+                        ctx.globalAlpha = alpha;
+                        ctx.fillStyle = panTypes[this.type].color;
+                        ctx.beginPath();
+                        ctx.arc(
+                            this.trail[i].x - this.x, 
+                            this.trail[i].y - this.y, 
+                            size, 0, Math.PI * 2
+                        );
+                        ctx.fill();
                     }
-                    ctx.stroke();
                     ctx.globalAlpha = 1;
                 }
 
-                // 绘制平底锅
-                ctx.fillStyle = panTypes[this.type].color;
+                // 绘制平底锅主体
+                const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size / 2);
+                gradient.addColorStop(0, panTypes[this.type].color);
+                gradient.addColorStop(0.7, this.darkenColor(panTypes[this.type].color, 0.2));
+                gradient.addColorStop(1, this.darkenColor(panTypes[this.type].color, 0.4));
+                
+                ctx.fillStyle = gradient;
                 ctx.beginPath();
                 ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.strokeStyle = '#333';
-                ctx.lineWidth = 3;
+                
+                // 增强的边框
+                ctx.strokeStyle = '#222';
+                ctx.lineWidth = 4;
                 ctx.stroke();
 
-                // 绘制锅柄
-                ctx.fillStyle = '#8B4513';
-                ctx.fillRect(this.size / 2, -5, this.size / 3, 10);
+                // 锅柄设计更精美
+                const handleGradient = ctx.createLinearGradient(this.size / 2, -8, this.size / 2 + this.size / 2.5, 8);
+                handleGradient.addColorStop(0, '#8B4513');
+                handleGradient.addColorStop(0.5, '#A0522D');
+                handleGradient.addColorStop(1, '#654321');
+                
+                ctx.fillStyle = handleGradient;
+                ctx.fillRect(this.size / 2, -8, this.size / 2.5, 16);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(this.size / 2, -8, this.size / 2.5, 16);
 
-                // 绘制表情符号
-                ctx.font = `${this.size / 3}px Arial`;
+                // 更大的表情符号
+                ctx.font = `${this.size / 2.5}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.fillStyle = 'white';
-                ctx.fillText(panTypes[this.type].emoji, 0, this.size / 6);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.strokeText(panTypes[this.type].emoji, 0, this.size / 8);
+                ctx.fillText(panTypes[this.type].emoji, 0, this.size / 8);
+
+                // 添加光泽效果
+                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.ellipse(-this.size / 6, -this.size / 6, this.size / 6, this.size / 8, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
 
                 ctx.restore();
+            }
+
+            darkenColor(color, factor) {
+                const hex = color.replace('#', '');
+                const r = Math.max(0, parseInt(hex.substr(0, 2), 16) * (1 - factor));
+                const g = Math.max(0, parseInt(hex.substr(2, 2), 16) * (1 - factor));
+                const b = Math.max(0, parseInt(hex.substr(4, 2), 16) * (1 - factor));
+                return `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`;
             }
 
             isPointInside(x, y) {
@@ -615,14 +828,36 @@
             }
 
             createSliceEffect() {
-                // 创建切割粒子效果
-                for (let i = 0; i < 15; i++) {
+                // 创建更丰富的切割粒子效果
+                for (let i = 0; i < 20; i++) {
                     particles.push(new Particle(
                         this.x + (Math.random() - 0.5) * this.size,
                         this.y + (Math.random() - 0.5) * this.size,
                         panTypes[this.type].color
                     ));
                 }
+                
+                // 添加切割吐槽
+                this.showSliceComplaint();
+            }
+
+            showSliceComplaint() {
+                const complaints = panTypes[this.type].complaints;
+                const randomComplaint = complaints[Math.floor(Math.random() * complaints.length)];
+                
+                const complaintElement = document.createElement('div');
+                complaintElement.className = 'slice-complaint';
+                complaintElement.textContent = randomComplaint;
+                complaintElement.style.left = this.x + 'px';
+                complaintElement.style.top = this.y + 'px';
+                
+                document.getElementById('gameScreen').appendChild(complaintElement);
+                
+                setTimeout(() => {
+                    if (complaintElement.parentNode) {
+                        complaintElement.parentNode.removeChild(complaintElement);
+                    }
+                }, 2000);
             }
         }
 
@@ -631,20 +866,20 @@
             constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
-                this.vx = (Math.random() - 0.5) * 10;
-                this.vy = (Math.random() - 0.5) * 10;
+                this.vx = (Math.random() - 0.5) * 12;
+                this.vy = (Math.random() - 0.5) * 12;
                 this.color = color;
                 this.life = 1;
-                this.decay = Math.random() * 0.02 + 0.02;
-                this.size = Math.random() * 8 + 4;
+                this.decay = Math.random() * 0.015 + 0.015;
+                this.size = Math.random() * 10 + 6;
             }
 
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vy += 0.2; // 重力
+                this.vy += 0.3; // 重力
                 this.life -= this.decay;
-                this.size *= 0.98;
+                this.size *= 0.97;
             }
 
             draw() {
@@ -673,7 +908,7 @@
             score = 0;
             combo = 0;
             timeLeft = 60;
-            spawnRate = 1500;
+            spawnRate = 1200;
             gameRunning = true;
             pans = [];
             particles = [];
@@ -703,7 +938,7 @@
             
             // 添加到鼠标轨迹
             mouseTrail.push({ x: mouseX, y: mouseY, time: Date.now() });
-            if (mouseTrail.length > 10) {
+            if (mouseTrail.length > 12) {
                 mouseTrail.shift();
             }
             
@@ -735,7 +970,7 @@
             lastMousePos = { x: touchX, y: touchY };
             
             mouseTrail.push({ x: touchX, y: touchY, time: Date.now() });
-            if (mouseTrail.length > 10) {
+            if (mouseTrail.length > 12) {
                 mouseTrail.shift();
             }
             
@@ -797,10 +1032,10 @@
         // 显示得分效果
         function showScoreEffect(x, y, points) {
             ctx.save();
-            ctx.font = 'bold 24px Arial';
+            ctx.font = 'bold 28px Arial';
             ctx.fillStyle = '#fff';
             ctx.strokeStyle = '#333';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 3;
             ctx.textAlign = 'center';
             ctx.strokeText(`+${points}`, x, y);
             ctx.fillText(`+${points}`, x, y);
@@ -815,8 +1050,8 @@
             const randomType = types[Math.floor(Math.random() * types.length)];
             
             // 从左下角康康的位置发射
-            const startX = 120;
-            const startY = canvas.height - 100;
+            const startX = 130;
+            const startY = canvas.height - 120;
             
             const pan = new Pan(startX, startY, randomType);
             pans.push(pan);
@@ -835,7 +1070,7 @@
             
             setTimeout(() => {
                 bubble.classList.add('hidden');
-            }, 3000);
+            }, 4000);
         }
 
         // 游戏循环
@@ -855,7 +1090,7 @@
                 pan.draw();
                 
                 // 移除超出屏幕的锅
-                if (pan.y > canvas.height + 100 || pan.x > canvas.width + 100) {
+                if (pan.y > canvas.height + 150 || pan.x > canvas.width + 150) {
                     pans.splice(i, 1);
                     // 如果锅掉了，重置连击
                     if (!pan.sliced) {
@@ -887,7 +1122,7 @@
             
             // 清理过期的轨迹点
             for (let i = mouseTrail.length - 1; i >= 0; i--) {
-                if (now - mouseTrail[i].time > 200) {
+                if (now - mouseTrail[i].time > 250) {
                     mouseTrail.splice(i, 1);
                 }
             }
@@ -900,11 +1135,13 @@
             
             for (let i = 1; i < mouseTrail.length; i++) {
                 const alpha = i / mouseTrail.length;
-                const width = 8 * alpha;
+                const width = 10 * alpha;
                 
                 ctx.globalAlpha = alpha;
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = width;
+                ctx.shadowColor = '#87CEEB';
+                ctx.shadowBlur = 15;
                 
                 ctx.beginPath();
                 ctx.moveTo(mouseTrail[i - 1].x, mouseTrail[i - 1].y);
@@ -928,8 +1165,8 @@
                 }
                 
                 // 难度递增
-                if (timeLeft % 10 === 0 && spawnRate > 300) {
-                    spawnRate -= 100;
+                if (timeLeft % 8 === 0 && spawnRate > 200) {
+                    spawnRate -= 80;
                     clearInterval(spawnTimer);
                     spawnTimer = setInterval(spawnPan, spawnRate);
                 }

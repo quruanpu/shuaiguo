@@ -3,624 +3,766 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>康康老师退群大师</title>
+    <title>康康退群大作战 - 甩锅传说</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
             overflow: hidden;
+            user-select: none;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* 登录界面 */
+        .login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            flex-direction: column;
+            z-index: 1000;
         }
-        
-        .game-container {
-            text-align: center;
-            position: relative;
-        }
-        
-        canvas {
-            border: 3px solid #ff6b6b;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            background: #f8f9fa;
-            cursor: pointer;
-        }
-        
-        .title {
-            color: #fff;
-            font-size: 2.2em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .game-ui {
-            display: flex;
-            justify-content: space-between;
-            color: #fff;
-            font-size: 1.2em;
-            margin-top: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .score-item {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 15px;
+
+        .login-box {
+            background: white;
+            padding: 40px;
             border-radius: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-        
-        .instructions {
-            color: #fff;
-            font-size: 1em;
-            margin-top: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .game-over-screen {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
             text-align: center;
-            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .restart-btn {
-            background: #e74c3c;
+        .login-box h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .login-box h2 {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .login-box input {
+            padding: 15px;
+            width: 300px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .login-box button {
+            padding: 15px 30px;
+            background: #667eea;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 15px;
+            transition: all 0.3s;
         }
 
-        .restart-btn:hover {
-            background: #c0392b;
+        .login-box button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        /* 游戏界面 */
+        .game-screen {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .game-header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            z-index: 100;
+        }
+
+        .score {
+            margin-bottom: 10px;
+        }
+
+        .time {
+            margin-bottom: 10px;
+        }
+
+        .level {
+            font-size: 18px;
+        }
+
+        /* 排行榜 */
+        .leaderboard {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            width: 250px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .leaderboard h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: rgba(102,126,234,0.1);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .leaderboard-item.top3 {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            font-weight: bold;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            cursor: crosshair;
+        }
+
+        /* 弹出的对象 */
+        .popup-item {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: popup 0.5s ease-out;
+        }
+
+        @keyframes popup {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        .popup-item:hover {
+            transform: scale(1.1);
+        }
+
+        .kangkang {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+
+        .xiaoou {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+            box-shadow: 0 5px 15px rgba(72,52,212,0.4);
+        }
+
+        .customer {
+            background: linear-gradient(45deg, #ff9f43, #feca57);
+            box-shadow: 0 5px 15px rgba(255,159,67,0.4);
+        }
+
+        .qa-group {
+            background: linear-gradient(45deg, #00d2d3, #54a0ff);
+            box-shadow: 0 5px 15px rgba(0,210,211,0.4);
+        }
+
+        /* 点击效果 */
+        .click-effect {
+            position: absolute;
+            pointer-events: none;
+            font-weight: bold;
+            font-size: 20px;
+            animation: clickEffect 1s ease-out forwards;
+        }
+
+        @keyframes clickEffect {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+
+        /* 游戏结束界面 */
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .game-over-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .game-over-box h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .game-over-box p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .game-over-box button {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .game-over-box button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        /* 吐槽气泡 */
+        .complaint-bubble {
+            position: absolute;
+            background: rgba(255,255,255,0.95);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            animation: bubbleFloat 3s ease-out forwards;
+            z-index: 50;
+            max-width: 200px;
+        }
+
+        @keyframes bubbleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            80% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1 class="title">🚪💨 康康老师退群大师 💨🚪</h1>
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        
-        <div class="game-ui">
-            <div class="score-item">
-                🎯 分数: <span id="score">0</span>
+    <div class="container">
+        <!-- 登录界面 -->
+        <div class="login-screen" id="loginScreen">
+            <div class="login-box">
+                <h1>🏃‍♂️ 康康退群大作战 🏃‍♂️</h1>
+                <h2>甩锅传说 - 药师帮OA流程争夺战</h2>
+                <input type="text" id="nicknameInput" placeholder="请输入您的昵称" maxlength="20">
+                <br>
+                <button onclick="startGame()">开始游戏</button>
             </div>
-            <div class="score-item">
-                🔥 连击: <span id="combo">0</span>
-            </div>
-            <div class="score-item">
-                ⏱️ 时间: <span id="timeLeft">60</span>
-            </div>
-            <div class="score-item">
-                📱 群聊: <span id="groupCount">0</span>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            点击康康老师帮他退群！速度要快，不然他会被迫解决问题！
         </div>
 
-        <div class="game-over-screen" id="gameOverScreen">
-            <h2>🎮 游戏结束！</h2>
-            <div id="finalStats"></div>
-            <button class="restart-btn" onclick="restartGame()">🔄 再来一局</button>
+        <!-- 游戏界面 -->
+        <div class="game-screen hidden" id="gameScreen">
+            <div class="game-header">
+                <div class="score">得分: <span id="score">0</span></div>
+                <div class="time">时间: <span id="time">60</span>s</div>
+                <div class="level">等级: <span id="level">1</span></div>
+            </div>
+
+            <div class="leaderboard" id="leaderboard">
+                <h3>🏆 排行榜 TOP 10</h3>
+                <div id="leaderboardContent">
+                    <!-- 排行榜内容将动态生成 -->
+                </div>
+            </div>
+
+            <div class="game-area" id="gameArea">
+                <!-- 游戏对象将动态生成 -->
+            </div>
+        </div>
+
+        <!-- 游戏结束界面 -->
+        <div class="game-over" id="gameOver">
+            <div class="game-over-box">
+                <h2 id="gameOverTitle">游戏结束!</h2>
+                <p id="gameOverScore">您的得分: 0</p>
+                <p id="gameOverRank"></p>
+                <button onclick="restartGame()">再来一局</button>
+                <button onclick="backToLogin()">返回主页</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // 游戏状态
-        let gameState = {
-            score: 0,
-            combo: 0,
-            timeLeft: 60,
-            groupCount: 0,
-            gameRunning: true,
-            spawnRate: 1500, // 群聊出现频率
-            lastSpawn: 0
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase配置和认证模块
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getDatabase, ref, get, set, push, onValue, off } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+        // Firebase配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyB3ioWABsutPeZ9LboagtxLLgo2kyi9Xnw",
+            authDomain: "zhuye-fb0a6.firebaseapp.com",
+            databaseURL: "https://zhuye-fb0a6-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "zhuye-fb0a6",
+            storageBucket: "zhuye-fb0a6.firebasestorage.app",
+            messagingSenderId: "5341756226",
+            appId: "1:5341756226:web:1df340a043774db92326db",
+            measurementId: "G-BG1920BDX0"
         };
-        
-        // UI元素
-        const scoreElement = document.getElementById('score');
-        const comboElement = document.getElementById('combo');
-        const timeElement = document.getElementById('timeLeft');
-        const groupCountElement = document.getElementById('groupCount');
-        const gameOverScreen = document.getElementById('gameOverScreen');
-        const finalStatsElement = document.getElementById('finalStats');
-        
-        let groups = [];
-        let particles = [];
-        let floatingTexts = [];
-        
-        // 康康老师退群语录（简短版）
-        const quitMessages = [
-            "我去开会了",
-            "网络不好",
-            "妈妈叫我吃饭",
-            "手机没电了",
-            "突然有事",
-            "信号不好",
-            "先忙了",
-            "改天再聊",
-            "有急事",
-            "不好意思啊"
-        ];
-        
-        // 群聊类型
-        const groupTypes = [
-            { name: "质量问题", color: "#e74c3c", points: 10, duration: 3000 },
-            { name: "紧急协调", color: "#f39c12", points: 15, duration: 2500 },
-            { name: "客户投诉", color: "#8e44ad", points: 20, duration: 2000 },
-            { name: "供应商问题", color: "#e67e22", points: 12, duration: 2800 },
-            { name: "成本超标", color: "#c0392b", points: 25, duration: 1800 }
-        ];
-        
-        // 群聊类
-        class Group {
-            constructor() {
-                this.x = Math.random() * (canvas.width - 200) + 100;
-                this.y = Math.random() * (canvas.height - 150) + 75;
-                this.type = groupTypes[Math.floor(Math.random() * groupTypes.length)];
-                this.width = 180;
-                this.height = 120;
-                this.life = this.type.duration;
-                this.maxLife = this.type.duration;
-                this.clicked = false;
-                this.kangkangState = 'thinking'; // thinking, speaking, leaving
-                this.message = '';
-                this.messageTimer = 0;
-                this.scale = 0.1;
-                this.growing = true;
-                
-                // 康康老师会在一定时间后自动退群
-                this.autoQuitTime = Math.random() * 1000 + 1500;
+
+        // 初始化Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // 游戏变量
+        let currentPlayer = '';
+        let gameRunning = false;
+        let score = 0;
+        let timeLeft = 60;
+        let level = 1;
+        let spawnRate = 2000;
+        let gameTimer;
+        let spawnTimer;
+
+        // 游戏对象类型和吐槽内容
+        const gameObjects = {
+            kangkang: {
+                name: '康康',
+                points: -50,
+                complaints: [
+                    '这明显是运营的事！',
+                    '我管首推，不管退货！',
+                    '小欧你来处理吧',
+                    '退群！',
+                    '这个锅我不背！'
+                ],
+                color: '#ff6b6b'
+            },
+            xiaoou: {
+                name: '小欧',
+                points: 30,
+                complaints: [
+                    '康康你别跑啊！',
+                    '首推的事你不管谁管？',
+                    '客户等着呢！',
+                    '这个流程你熟悉',
+                    '别甩锅给我！'
+                ],
+                color: '#4834d4'
+            },
+            customer: {
+                name: '客户',
+                points: 100,
+                complaints: [
+                    '我就要个退货...',
+                    '你们内部解决好吗？',
+                    '药都压坏了！',
+                    '到底谁负责？',
+                    '服务态度呢？'
+                ],
+                color: '#ff9f43'
+            },
+            qaGroup: {
+                name: '质量群',
+                points: 50,
+                complaints: [
+                    '大家冷静讨论',
+                    '按流程走',
+                    '康康又退群了...',
+                    '欣姐很无奈',
+                    '代姐也很累'
+                ],
+                color: '#00d2d3'
+            }
+        };
+
+        // 全局函数
+        window.startGame = async function() {
+            const nickname = document.getElementById('nicknameInput').value.trim();
+            if (!nickname) {
+                alert('请输入昵称！');
+                return;
             }
             
-            update(deltaTime) {
-                if (this.clicked) return;
-                
-                // 群聊出现动画
-                if (this.growing && this.scale < 1) {
-                    this.scale += 0.05;
-                    if (this.scale >= 1) {
-                        this.scale = 1;
-                        this.growing = false;
-                    }
-                }
-                
-                this.life -= deltaTime;
-                this.messageTimer += deltaTime;
-                this.autoQuitTime -= deltaTime;
-                
-                // 康康老师状态变化
-                if (this.kangkangState === 'thinking' && this.messageTimer > 800) {
-                    this.kangkangState = 'speaking';
-                    this.message = quitMessages[Math.floor(Math.random() * quitMessages.length)];
-                    this.messageTimer = 0;
-                }
-                
-                // 自动退群
-                if (this.autoQuitTime <= 0 && !this.clicked) {
-                    this.autoQuit();
-                }
-            }
+            currentPlayer = nickname;
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
             
-            draw() {
-                if (this.clicked) return;
-                
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.scale(this.scale, this.scale);
-                
-                // 群聊窗口
-                ctx.fillStyle = this.type.color;
-                ctx.strokeStyle = '#2c2c2c';
-                ctx.lineWidth = 3;
-                
-                ctx.beginPath();
-                ctx.roundRect(-this.width/2, -this.height/2, this.width, this.height, 15);
-                ctx.fill();
-                ctx.stroke();
-                
-                // 群聊标题
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 14px Microsoft YaHei';
-                ctx.textAlign = 'center';
-                ctx.fillText(`💬 ${this.type.name}`, 0, -this.height/2 + 20);
-                
-                // 康康老师头像
-                ctx.fillStyle = '#fdbcb4';
-                ctx.beginPath();
-                ctx.arc(-40, -10, 25, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // 康康老师表情
-                ctx.fillStyle = '#000';
-                ctx.beginPath();
-                if (this.kangkangState === 'thinking') {
-                    // 思考的眼神
-                    ctx.arc(-46, -15, 2, 0, Math.PI * 2);
-                    ctx.arc(-34, -15, 2, 0, Math.PI * 2);
-                } else {
-                    // 准备跑路的眼神
-                    ctx.ellipse(-46, -15, 3, 1, 0, 0, Math.PI * 2);
-                    ctx.ellipse(-34, -15, 3, 1, 0, 0, Math.PI * 2);
-                }
-                ctx.fill();
-                
-                // 嘴巴
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                if (this.kangkangState === 'speaking') {
-                    ctx.arc(-40, -5, 4, 0, Math.PI);
-                } else {
-                    ctx.moveTo(-44, -5);
-                    ctx.lineTo(-36, -5);
-                }
-                ctx.stroke();
-                
-                // 康康老师名字
-                ctx.fillStyle = '#fff';
-                ctx.font = '10px Microsoft YaHei';
-                ctx.fillText('康康老师', -40, 20);
-                
-                // 消息气泡
-                if (this.message) {
-                    ctx.fillStyle = 'rgba(255,255,255,0.95)';
-                    ctx.strokeStyle = this.type.color;
-                    ctx.lineWidth = 2;
-                    
-                    const msgWidth = this.message.length * 8 + 20;
-                    ctx.beginPath();
-                    ctx.roundRect(20 - msgWidth/2, -30, msgWidth, 25, 10);
-                    ctx.fill();
-                    ctx.stroke();
-                    
-                    ctx.fillStyle = '#333';
-                    ctx.font = '11px Microsoft YaHei';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(this.message, 20, -12);
-                }
-                
-                // 生命值条
-                const lifePercent = this.life / this.maxLife;
-                ctx.fillStyle = lifePercent > 0.5 ? '#27ae60' : lifePercent > 0.2 ? '#f39c12' : '#e74c3c';
-                ctx.fillRect(-this.width/2, this.height/2 - 10, this.width * lifePercent, 6);
-                
-                // 点击提示
-                if (this.kangkangState === 'speaking') {
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.font = 'bold 12px Microsoft YaHei';
-                    ctx.fillText('👆 快点击康康！', 0, this.height/2 + 20);
-                }
-                
-                ctx.restore();
-            }
-            
-            checkClick(mouseX, mouseY) {
-                const dx = mouseX - this.x;
-                const dy = mouseY - this.y;
-                return Math.sqrt(dx * dx + dy * dy) < 60 && !this.clicked;
-            }
-            
-            onClick() {
-                if (this.clicked) return;
-                
-                this.clicked = true;
-                
-                // 计分
-                let points = this.type.points;
-                if (gameState.combo > 0) {
-                    points += Math.floor(gameState.combo / 2);
-                }
-                
-                gameState.score += points;
-                gameState.combo++;
-                scoreElement.textContent = gameState.score;
-                comboElement.textContent = gameState.combo;
-                
-                // 创建粒子效果
-                this.createParticles('#27ae60');
-                
-                // 显示得分文字
-                floatingTexts.push(new FloatingText(this.x, this.y, `+${points}`, '#27ae60'));
-                
-                // 连击奖励
-                if (gameState.combo % 5 === 0) {
-                    floatingTexts.push(new FloatingText(this.x, this.y - 30, `${gameState.combo}连击！`, '#f39c12'));
-                }
-                
-                // 游戏加速
-                if (gameState.spawnRate > 500) {
-                    gameState.spawnRate -= 20;
-                }
-            }
-            
-            autoQuit() {
-                if (this.clicked) return;
-                
-                this.clicked = true;
-                gameState.combo = 0; // 失去连击
-                comboElement.textContent = gameState.combo;
-                
-                // 创建失败粒子
-                this.createParticles('#e74c3c');
-                floatingTexts.push(new FloatingText(this.x, this.y, '被迫解决问题！', '#e74c3c'));
-            }
-            
-            createParticles(color) {
-                for (let i = 0; i < 12; i++) {
-                    particles.push(new Particle(this.x, this.y, color));
-                }
-            }
+            await loadLeaderboard();
+            initGame();
+        };
+
+        window.restartGame = function() {
+            document.getElementById('gameOver').style.display = 'none';
+            initGame();
+        };
+
+        window.backToLogin = function() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('nicknameInput').value = '';
+        };
+
+        // 初始化游戏
+        function initGame() {
+            score = 0;
+            timeLeft = 60;
+            level = 1;
+            spawnRate = 2000;
+            gameRunning = true;
+
+            updateUI();
+            clearGameArea();
+            startGameLoop();
         }
-        
-        // 粒子类
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 8;
-                this.vy = (Math.random() - 0.5) * 8;
-                this.life = 1.0;
-                this.color = color;
-                this.size = Math.random() * 4 + 2;
-            }
-            
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.2;
-                this.vx *= 0.98;
-                this.life -= 0.02;
-            }
-            
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.life;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-        
-        // 浮动文字类
-        class FloatingText {
-            constructor(x, y, text, color) {
-                this.x = x;
-                this.y = y;
-                this.text = text;
-                this.color = color;
-                this.life = 1.5;
-                this.vy = -2;
-            }
-            
-            update() {
-                this.y += this.vy;
-                this.life -= 0.02;
-            }
-            
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.life / 1.5;
-                ctx.fillStyle = this.color;
-                ctx.font = 'bold 16px Microsoft YaHei';
-                ctx.textAlign = 'center';
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 3;
-                ctx.strokeText(this.text, this.x, this.y);
-                ctx.fillText(this.text, this.x, this.y);
-                ctx.restore();
-            }
-        }
-        
-        // 绘制背景
-        function drawBackground() {
-            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#87CEEB');
-            gradient.addColorStop(1, '#98FB98');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // 办公室氛围
-            ctx.fillStyle = 'rgba(255,255,255,0.1)';
-            for (let i = 0; i < 5; i++) {
-                const x = (i * 160 + Date.now() * 0.02) % (canvas.width + 100) - 50;
-                const y = 100 + Math.sin(Date.now() * 0.001 + i) * 30;
+
+        // 开始游戏循环
+        function startGameLoop() {
+            // 计时器
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                updateUI();
                 
-                ctx.beginPath();
-                ctx.arc(x, y, 30, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            // 连击显示
-            if (gameState.combo > 2) {
-                ctx.fillStyle = `hsl(${Math.min(gameState.combo * 15, 60)}, 100%, 50%)`;
-                ctx.font = 'bold 24px Arial';
-                ctx.textAlign = 'center';
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 3;
-                ctx.strokeText(`${gameState.combo}x 连击！`, canvas.width / 2, 50);
-                ctx.fillText(`${gameState.combo}x 连击！`, canvas.width / 2, 50);
-            }
-        }
-        
-        // 游戏主循环
-        let lastTime = 0;
-        function gameLoop(currentTime) {
-            const deltaTime = currentTime - lastTime;
-            lastTime = currentTime;
-            
-            if (!gameState.gameRunning) return;
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBackground();
-            
-            // 生成新群聊
-            if (currentTime - gameState.lastSpawn > gameState.spawnRate) {
-                if (groups.filter(g => !g.clicked).length < 4) { // 最多4个群聊
-                    groups.push(new Group());
-                    gameState.groupCount++;
-                    groupCountElement.textContent = gameState.groupCount;
-                    gameState.lastSpawn = currentTime;
-                }
-            }
-            
-            // 更新群聊
-            groups = groups.filter(group => {
-                if (!group.clicked) {
-                    group.update(deltaTime);
-                    group.draw();
-                    return group.life > 0;
-                }
-                return false;
-            });
-            
-            // 更新粒子
-            particles = particles.filter(particle => {
-                particle.update();
-                particle.draw();
-                return particle.life > 0;
-            });
-            
-            // 更新浮动文字
-            floatingTexts = floatingTexts.filter(text => {
-                text.update();
-                text.draw();
-                return text.life > 0;
-            });
-            
-            requestAnimationFrame(gameLoop);
-        }
-        
-        // 游戏计时器
-        function startTimer() {
-            const timer = setInterval(() => {
-                if (!gameState.gameRunning) {
-                    clearInterval(timer);
-                    return;
-                }
-                
-                gameState.timeLeft--;
-                timeElement.textContent = gameState.timeLeft;
-                
-                if (gameState.timeLeft <= 0) {
+                if (timeLeft <= 0) {
                     endGame();
-                    clearInterval(timer);
+                }
+                
+                // 升级逻辑
+                const newLevel = Math.floor(score / 500) + 1;
+                if (newLevel > level) {
+                    level = newLevel;
+                    spawnRate = Math.max(500, spawnRate - 200);
+                    restartSpawnTimer();
+                }
+            }, 1000);
+
+            // 生成对象
+            startSpawnTimer();
+        }
+
+        function startSpawnTimer() {
+            spawnTimer = setInterval(spawnObject, spawnRate);
+        }
+
+        function restartSpawnTimer() {
+            clearInterval(spawnTimer);
+            startSpawnTimer();
+        }
+
+        // 生成游戏对象
+        function spawnObject() {
+            if (!gameRunning) return;
+
+            const gameArea = document.getElementById('gameArea');
+            const objectTypes = Object.keys(gameObjects);
+            const randomType = objectTypes[Math.floor(Math.random() * objectTypes.length)];
+            const objectData = gameObjects[randomType];
+
+            const popup = document.createElement('div');
+            popup.className = `popup-item ${randomType}`;
+            popup.textContent = objectData.name;
+            
+            // 随机位置
+            const maxX = gameArea.clientWidth - 80;
+            const maxY = gameArea.clientHeight - 80;
+            popup.style.left = Math.random() * maxX + 'px';
+            popup.style.top = Math.random() * maxY + 'px';
+
+            // 点击事件
+            popup.addEventListener('click', () => handleClick(popup, randomType));
+
+            gameArea.appendChild(popup);
+
+            // 3秒后自动消失
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.parentNode.removeChild(popup);
+                }
+            }, 3000);
+
+            // 随机显示吐槽气泡
+            if (Math.random() < 0.3) {
+                showComplaintBubble(popup, objectData.complaints);
+            }
+        }
+
+        // 处理点击
+        function handleClick(element, type) {
+            const objectData = gameObjects[type];
+            score += objectData.points;
+            
+            // 显示点击效果
+            showClickEffect(element, objectData.points);
+            
+            // 移除元素
+            if (element.parentNode) {
+                element.parentNode.removeChild(element);
+            }
+            
+            updateUI();
+        }
+
+        // 显示点击效果
+        function showClickEffect(element, points) {
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.textContent = points > 0 ? `+${points}` : points;
+            effect.style.color = points > 0 ? '#4CAF50' : '#F44336';
+            effect.style.left = element.style.left;
+            effect.style.top = element.style.top;
+            
+            document.getElementById('gameArea').appendChild(effect);
+            
+            setTimeout(() => {
+                if (effect.parentNode) {
+                    effect.parentNode.removeChild(effect);
                 }
             }, 1000);
         }
-        
-        // 结束游戏
-        function endGame() {
-            gameState.gameRunning = false;
+
+        // 显示吐槽气泡
+        function showComplaintBubble(element, complaints) {
+            const bubble = document.createElement('div');
+            bubble.className = 'complaint-bubble';
+            bubble.textContent = complaints[Math.floor(Math.random() * complaints.length)];
             
-            let rank = '';
-            if (gameState.score >= 500) rank = '🏆 退群大师';
-            else if (gameState.score >= 300) rank = '🥈 甩锅高手';
-            else if (gameState.score >= 150) rank = '🥉 逃避新手';
-            else rank = '😅 还需努力';
+            const rect = element.getBoundingClientRect();
+            bubble.style.left = (rect.left - 100) + 'px';
+            bubble.style.top = (rect.top - 50) + 'px';
             
-            finalStatsElement.innerHTML = `
-                <h3>${rank}</h3>
-                <p>🎯 总分数: ${gameState.score}</p>
-                <p>🔥 最高连击: ${Math.max(...(gameState.comboHistory || [gameState.combo]))}</p>
-                <p>📱 处理群聊: ${gameState.groupCount}</p>
-                <p>⚡ 退群效率: ${((gameState.score / gameState.groupCount) || 0).toFixed(1)}</p>
-            `;
+            document.getElementById('gameArea').appendChild(bubble);
             
-            gameOverScreen.style.display = 'block';
-        }
-        
-        // 重新开始游戏
-        function restartGame() {
-            gameState = {
-                score: 0,
-                combo: 0,
-                timeLeft: 60,
-                groupCount: 0,
-                gameRunning: true,
-                spawnRate: 1500,
-                lastSpawn: 0,
-                comboHistory: []
-            };
-            
-            groups = [];
-            particles = [];
-            floatingTexts = [];
-            
-            scoreElement.textContent = gameState.score;
-            comboElement.textContent = gameState.combo;
-            timeElement.textContent = gameState.timeLeft;
-            groupCountElement.textContent = gameState.groupCount;
-            
-            gameOverScreen.style.display = 'none';
-            
-            lastTime = 0;
-            requestAnimationFrame(gameLoop);
-            startTimer();
-        }
-        
-        // 鼠标点击事件
-        canvas.addEventListener('click', (e) => {
-            if (!gameState.gameRunning) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // 检查是否点击了群聊中的康康老师
-            let hit = false;
-            groups.forEach(group => {
-                if (group.checkClick(x, y)) {
-                    group.onClick();
-                    hit = true;
+            setTimeout(() => {
+                if (bubble.parentNode) {
+                    bubble.parentNode.removeChild(bubble);
                 }
-            });
-            
-            // 记录最高连击
-            if (!gameState.comboHistory) gameState.comboHistory = [];
-            gameState.comboHistory.push(gameState.combo);
-        });
-        
-        // CanvasRenderingContext2D.roundRect polyfill
-        if (!CanvasRenderingContext2D.prototype.roundRect) {
-            CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
-                this.beginPath();
-                this.moveTo(x + radius, y);
-                this.lineTo(x + width - radius, y);
-                this.quadraticCurveTo(x + width, y, x + width, y + radius);
-                this.lineTo(x + width, y + height - radius);
-                this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-                this.lineTo(x + radius, y + height);
-                this.quadraticCurveTo(x, y + height, x, y + height - radius);
-                this.lineTo(x, y + radius);
-                this.quadraticCurveTo(x, y, x + radius, y);
-                this.closePath();
-            };
+            }, 3000);
         }
-        
-        // 开始游戏
-        requestAnimationFrame(gameLoop);
-        startTimer();
+
+        // 更新UI
+        function updateUI() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('time').textContent = timeLeft;
+            document.getElementById('level').textContent = level;
+        }
+
+        // 清空游戏区域
+        function clearGameArea() {
+            const gameArea = document.getElementById('gameArea');
+            while (gameArea.firstChild) {
+                gameArea.removeChild(gameArea.firstChild);
+            }
+        }
+
+        // 结束游戏
+        async function endGame() {
+            gameRunning = false;
+            clearInterval(gameTimer);
+            clearInterval(spawnTimer);
+            clearGameArea();
+            
+            await saveScore();
+            await loadLeaderboard();
+            showGameOver();
+        }
+
+        // 显示游戏结束界面
+        async function showGameOver() {
+            const gameOverElement = document.getElementById('gameOver');
+            const titleElement = document.getElementById('gameOverTitle');
+            const scoreElement = document.getElementById('gameOverScore');
+            const rankElement = document.getElementById('gameOverRank');
+            
+            scoreElement.textContent = `您的得分: ${score}`;
+            
+            // 获取排名
+            const rank = await getPlayerRank();
+            if (rank <= 10) {
+                titleElement.textContent = '🎉 恭喜上榜！';
+                rankElement.textContent = `当前排名: 第${rank}名`;
+            } else {
+                titleElement.textContent = '继续努力！';
+                rankElement.textContent = `当前排名: 第${rank}名`;
+            }
+            
+            gameOverElement.style.display = 'flex';
+        }
+
+        // 保存分数
+        async function saveScore() {
+            try {
+                const playerRef = ref(database, `youxi/${currentPlayer}`);
+                const snapshot = await get(playerRef);
+                
+                if (snapshot.exists()) {
+                    const currentBest = snapshot.val().score;
+                    if (score > currentBest) {
+                        await set(playerRef, {
+                            nickname: currentPlayer,
+                            score: score,
+                            timestamp: Date.now()
+                        });
+                    }
+                } else {
+                    await set(playerRef, {
+                        nickname: currentPlayer,
+                        score: score,
+                        timestamp: Date.now()
+                    });
+                }
+            } catch (error) {
+                console.error('保存分数失败:', error);
+            }
+        }
+
+        // 加载排行榜
+        async function loadLeaderboard() {
+            try {
+                const scoresRef = ref(database, 'youxi');
+                const snapshot = await get(scoresRef);
+                
+                if (snapshot.exists()) {
+                    const scores = [];
+                    snapshot.forEach((child) => {
+                        scores.push(child.val());
+                    });
+                    
+                    // 按分数排序
+                    scores.sort((a, b) => b.score - a.score);
+                    
+                    // 显示前10名
+                    displayLeaderboard(scores.slice(0, 10));
+                }
+            } catch (error) {
+                console.error('加载排行榜失败:', error);
+            }
+        }
+
+        // 显示排行榜
+        function displayLeaderboard(scores) {
+            const content = document.getElementById('leaderboardContent');
+            content.innerHTML = '';
+            
+            scores.forEach((player, index) => {
+                const item = document.createElement('div');
+                item.className = `leaderboard-item ${index < 3 ? 'top3' : ''}`;
+                
+                const rank = index + 1;
+                const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+                
+                item.innerHTML = `
+                    <span>${medal} ${player.nickname}</span>
+                    <span>${player.score}</span>
+                `;
+                
+                content.appendChild(item);
+            });
+        }
+
+        // 获取玩家排名
+        async function getPlayerRank() {
+            try {
+                const scoresRef = ref(database, 'youxi');
+                const snapshot = await get(scoresRef);
+                
+                if (snapshot.exists()) {
+                    const scores = [];
+                    snapshot.forEach((child) => {
+                        scores.push(child.val());
+                    });
+                    
+                    scores.sort((a, b) => b.score - a.score);
+                    
+                    for (let i = 0; i < scores.length; i++) {
+                        if (scores[i].nickname === currentPlayer) {
+                            return i + 1;
+                        }
+                    }
+                }
+                return 999;
+            } catch (error) {
+                console.error('获取排名失败:', error);
+                return 999;
+            }
+        }
+
+        // 页面加载时加载排行榜
+        window.addEventListener('load', () => {
+            // 初始加载排行榜（如果需要在登录前显示）
+        });
     </script>
 </body>
 </html>
